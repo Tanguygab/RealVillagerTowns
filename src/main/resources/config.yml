@@ -1,0 +1,1565 @@
+skins:
+  male:
+    farmer:
+      - "000LAY"
+      - "100000000"
+      - "2807"
+      - "0_Luffy_0"
+      - "0_Chameleon_0"
+      - "8ay"
+      - "3Danous"
+      - "0mikron"
+      - "0100011001000011"
+      - "0mikron"
+    librarian:
+      - "10jezza10"
+      - "000Fajmy_"
+      - "Amethystine"
+      - "007zander"
+      - "5corpius"
+      - "0575"
+      - "0dyl"
+      - "0Cruq"
+    weaponsmith:
+      - "1000tobbe"
+      - "0100011001000011"
+      - "190898"
+      - "0072"
+      - "123_go"
+      - "3agles"
+      - "Amethystine"
+      - "00T_"
+      - "3bed"
+      - "3GG_"
+      - "021Alt"
+    butcher:
+      - "2Indie4U"
+      - "3PSat"
+      - "1garsur"
+      - "0100011001000011"
+      - "00101000"
+      - "1tyler21"
+      - "3j0hn"
+      - "09x09"
+    cleric:
+      - "11th__Doctor"
+      - "09x09"
+      - "0100011001000011"
+      - "000Alfa"
+      - "3rayman3"
+      - "appu1232"
+      - "6blaynee8"
+      - "0100011001000011"
+    leatherworker:
+      - "1000tobbe"
+      - "0100011001000011"
+      - "190898"
+      - "0072"
+      - "123_go"
+      - "3agles"
+      - "Amethystine"
+      - "00T_"
+      - "3bed"
+      - "3GG_"
+      - "021Alt"
+    fletcher:
+      - "2sekunden"
+      - "101VaultBoy101"
+      - "2DRags"
+      - "2EyedBunny"
+      - "9littlebees"
+      - "Aaron203"
+      - "Agerog"
+      - "21quentin"
+    toolsmith:
+      - "1000tobbe"
+      - "0100011001000011"
+      - "190898"
+      - "0072"
+      - "123_go"
+      - "3agles"
+      - "Amethystine"
+      - "00T_"
+      - "3bed"
+      - "3GG_"
+      - "021Alt"
+    cartographer:
+      - "2sekunden"
+      - "101VaultBoy101"
+      - "2DRags"
+      - "2EyedBunny"
+      - "9littlebees"
+      - "Aaron203"
+      - "Agerog"
+      - "21quentin"
+    mason:
+      - "01111000"
+      - "0100011001000011"
+      - "183official"
+      - "2807"
+      - "117lone"
+      - "0The_B_I_G"
+      - "2sekunden"
+    armorer:
+      - "0bsidianBlack"
+      - "1dud"
+      - "49Soul"
+      - "000minec"
+      - "17ThedarkLord"
+      - "777LinkTriForce"
+      - "1in3"
+      - "2012jinwoo"
+      - "123pacman04"
+    shepherd:
+      - "0bsidianBlack"
+      - "1dud"
+      - "49Soul"
+      - "000minec"
+      - "17ThedarkLord"
+      - "777LinkTriForce"
+      - "1in3"
+      - "2012jinwoo"
+      - "123pacman04"
+    fisherman:
+      - "1LSS"
+      - "23Lancelot"
+      - "42nl"
+      - "agramane"
+      - "183official"
+      - "999Elias"
+    nitwit:
+      - "01q"
+      - "1stElite"
+      - "12xE"
+      - "626bus"
+    vindicator:
+      - "Villagy"
+      - "Nvidea"
+    evoker:
+      - "Deathnote"
+      - "authentic"
+      - "ola"
+    witch:
+      - "Vaca12"
+      - "Ken_Kaneki_kun"
+      - "ZackDaWack1"
+  female:
+    farmer:
+      - "0Nobody"
+      - "0hSakura"
+      - "1mEther"
+      - "0hCharlie"
+      - "8160"
+      - "20xl"
+      - "0DreadMore_"
+      - "0ser"
+      - "0lijf"
+    cleric:
+      - "2807"
+      - "0lympia"
+      - "0100011001000011"
+      - "01_honeybee"
+      - "0nceuponatime"
+      - "1DrachiiLSP"
+      - "00ga_B00ga"
+      - "StTv"
+    librarian:
+      - "1mEther"
+      - "0100011001000011"
+      - "Ahriiiii"
+      - "0lijf"
+      - "11Kippers"
+      - "197927030"
+      - "5eversimmer"
+      - "1i1i"
+    weaponsmith:
+      - "25Arvind02"
+      - "11Kippers"
+      - "2807"
+      - "2807"
+      - "26_95"
+      - "2807"
+      - "0Cy_ren"
+      - "10Fps_"
+    butcher:
+      - "11Kippers"
+      - "115K"
+      - "0100011001000011"
+      - "Lizth"
+      - "0Cy_ren"
+      - "1027"
+      - "983dOnkEycHeEks"
+      - "0Nobody"
+    leatherworker:
+      - "115K"
+      - "0100011001000011"
+      - "Lizth"
+      - "2807"
+      - "akuny"
+      - "1tsN1n1"
+      - "2807"
+      - "0Cy_ren"
+    fletcher:
+      - "1mEther"
+      - "115K"
+      - "luvhm"
+      - "NuvSuicida"
+      - "Lizth"
+      - "Ellielza"
+      - "admiri"
+      - "AnimeTiddieesUwU"
+      - "8160"
+      - "Carnesita"
+      - "0100011001000011"
+    toolsmith:
+      - "25Arvind02"
+      - "11Kippers"
+      - "2807"
+      - "2807"
+      - "26_95"
+      - "2807"
+      - "0Cy_ren"
+      - "10Fps_"
+    cartographer:
+      - "1mEther"
+      - "115K"
+      - "luvhm"
+      - "NuvSuicida"
+      - "Lizth"
+      - "Ellielza"
+      - "admiri"
+      - "AnimeTiddieesUwU"
+      - "8160"
+      - "Carnesita"
+      - "0100011001000011"
+    mason:
+      - "1mEther"
+      - "115K"
+      - "luvhm"
+      - "NuvSuicida"
+      - "Lizth"
+      - "Ellielza"
+      - "admiri"
+      - "AnimeTiddieesUwU"
+      - "8160"
+      - "Carnesita"
+      - "0100011001000011"
+    armorer:
+      - "AbbygailTheGreat"
+      - "0100011001000011"
+      - "26_95"
+      - "4House"
+      - "AKIMITSUUUUUUUUU"
+      - "BACinject"
+      - "86R"
+      - "Spezc"
+      - "WolfPackGacha"
+      - "ArroZz"
+    shepherd:
+      - "AlexBay"
+      - "0wnerLynn"
+      - "0100011001000011"
+      - "Emma_Vibez"
+      - "flawing"
+      - "Carnesita"
+      - "BoChurchTV"
+      - "8160"
+      - "Alyssatjuuhh"
+      - "201861TW"
+    fisherman:
+      - "AlexBay"
+      - "0wnerLynn"
+      - "0100011001000011"
+      - "Emma_Vibez"
+      - "flawing"
+      - "Carnesita"
+      - "BoChurchTV"
+      - "8160"
+      - "Alyssatjuuhh"
+      - "201861TW"
+    nitwit:
+      - "gaytasha"
+      - "0Finley0"
+      - "AlexBay"
+      - "0wnerLynn"
+      - "0100011001000011"
+      - "Emma_Vibez"
+      - "flawing"
+      - "Carnesita"
+      - "BoChurchTV"
+      - "8160"
+      - "Alyssatjuuhh"
+      - "201861TW"
+    vindicator:
+      - "Knukles"
+      - "keyblademaster"
+      - "Arcturio"
+      - "MaryGrace"
+    evoker:
+      - "alicia33226"
+      - "Lifechild"
+      - "Tere1610"
+      - "DaisyGamer"
+      - "SSJ"
+      - "Olivia"
+      - "amniraku"
+    witch:
+      - "Carol_Fofinha"
+      - "Pursia"
+      - "EEE"
+useNames: true
+names:
+  male:
+    - Jacob
+    - Michael
+    - Joshua
+    - Matthew
+    - Ethan
+    - Andrew
+    - Daniel
+    - Anthony
+    - Christopher
+    - Joseph
+    - William
+    - Alexander
+    - Ryan
+    - David
+    - Nicholas
+    - Tyler
+    - James
+    - John
+    - Jonathan
+    - Nathan
+    - Samuel
+    - Christian
+    - Noah
+    - Dylan
+    - Benjamin
+    - Logan
+    - Brandon
+    - Gabriel
+    - Zachary
+    - Jose
+    - Elijah
+    - Angel
+    - Kevin
+    - Jack
+    - Caleb
+    - Justin
+    - Austin
+    - Evan
+    - Robert
+    - Thomas
+    - Luke
+    - Mason
+    - Aidan
+    - Jackson
+    - Isaiah
+    - Jordan
+    - Gavin
+    - Connor
+    - Aiden
+    - Isaac
+    - Jason
+    - Cameron
+    - Hunter
+    - Jayden
+    - Juan
+    - Charles
+    - Aaron
+    - Lucas
+    - Luis
+    - Owen
+    - Landon
+    - Diego
+    - Brian
+    - Adam
+    - Adrian
+    - Kyle
+    - Eric
+    - Ian
+    - Nathaniel
+    - Carlos
+    - Alex
+    - Bryan
+    - Jesus
+    - Julian
+    - Sean
+    - Carter
+    - Hayden
+    - Jeremiah
+    - Cole
+    - Brayden
+    - Wyatt
+    - Chase
+    - Steven
+    - Timothy
+    - Dominic
+    - Sebastian
+    - Xavier
+    - Jaden
+    - Jesse
+    - Devin
+    - Seth
+    - Antonio
+    - Richard
+    - Miguel
+    - Colin
+    - Cody
+    - Alejandro
+    - Caden
+    - Blake
+    - Carson
+    - Kaden
+    - Jake
+    - Henry
+    - Liam
+    - Victor
+    - Riley
+    - Ashton
+    - Patrick
+    - Bryce
+    - Brady
+    - Vincent
+    - Trevor
+    - Tristan
+    - Mark
+    - Jeremy
+    - Oscar
+    - Marcus
+    - Jorge
+    - Parker
+    - Kaleb
+    - Cooper
+    - Kenneth
+    - Garrett
+    - Joel
+    - Ivan
+    - Josiah
+    - Alan
+    - Conner
+    - Eduardo
+    - Paul
+    - Tanner
+    - Braden
+    - Alexis
+    - Edward
+    - Omar
+    - Nicolas
+    - Jared
+    - Peyton
+    - George
+    - Maxwell
+    - Cristian
+    - Francisco
+    - Collin
+    - Nolan
+    - Preston
+    - Stephen
+    - Ayden
+    - Gage
+    - Levi
+    - Dakota
+    - Micah
+    - Eli
+    - Manuel
+    - Grant
+    - Colton
+    - Damian
+    - Ricardo
+    - Giovanni
+    - Andres
+    - Emmanuel
+    - Peter
+    - Malachi
+    - Cesar
+    - Javier
+    - Max
+    - Hector
+    - Edgar
+    - Shane
+    - Fernando
+    - Ty
+    - Jeffrey
+    - Bradley
+    - Derek
+    - Travis
+    - Brendan
+    - Shawn
+    - Edwin
+    - Spencer
+    - Mario
+    - Dalton
+    - Erick
+    - Johnathan
+    - Erik
+    - Jonah
+    - Donovan
+    - Leonardo
+    - Wesley
+    - Elias
+    - Marco
+    - Trenton
+    - Devon
+    - Brody
+    - Abraham
+    - Jaylen
+    - Bryson
+    - Josue
+    - Sergio
+    - Drew
+    - Damien
+    - Raymond
+    - Andy
+    - Dillon
+    - Gregory
+    - Roberto
+    - Roman
+    - Martin
+    - Andre
+    - Jace
+    - Oliver
+    - Miles
+    - Harrison
+    - Jalen
+    - Corey
+    - Dominick
+    - Avery
+    - Clayton
+    - Pedro
+    - Israel
+    - Calvin
+    - Colby
+    - Dawson
+    - Cayden
+    - Jaiden
+    - Taylor
+    - Landen
+    - Troy
+    - Julio
+    - Trey
+    - Jaxon
+    - Rafael
+    - Dustin
+    - Ruben
+    - Camden
+    - Frank
+    - Scott
+    - Mitchell
+    - Zane
+    - Payton
+    - Kai
+    - Keegan
+    - Skyler
+    - Brett
+    - Johnny
+    - Griffin
+    - Marcos
+    - Derrick
+    - Drake
+    - Raul
+    - Kaiden
+    - Gerardo
+  female:
+    - Emily
+    - Emma
+    - Madison
+    - Abigail
+    - Olivia
+    - Isabella
+    - Hannah
+    - Samantha
+    - Ava
+    - Ashley
+    - Sophia
+    - Elizabeth
+    - Alexis
+    - Grace
+    - Sarah
+    - Alyssa
+    - Mia
+    - Natalie
+    - Chloe
+    - Brianna
+    - Lauren
+    - Ella
+    - Anna
+    - Taylor
+    - Kayla
+    - Hailey
+    - Jessica
+    - Victoria
+    - Jasmine
+    - Sydney
+    - Julia
+    - Destiny
+    - Morgan
+    - Kaitlyn
+    - Savannah
+    - Katherine
+    - Alexandra
+    - Rachel
+    - Lily
+    - Megan
+    - Kaylee
+    - Jennifer
+    - Angelina
+    - Makayla
+    - Allison
+    - Brooke
+    - Maria
+    - Trinity
+    - Lillian
+    - Mackenzie
+    - Faith
+    - Sofia
+    - Riley
+    - Haley
+    - Gabrielle
+    - Nicole
+    - Kylie
+    - Katelyn
+    - Zoe
+    - Paige
+    - Gabriella
+    - Jenna
+    - Kimberly
+    - Stephanie
+    - Alexa
+    - Avery
+    - Andrea
+    - Leah
+    - Madeline
+    - Nevaeh
+    - Evelyn
+    - Maya
+    - Mary
+    - Michelle
+    - Jada
+    - Sara
+    - Audrey
+    - Brooklyn
+    - Vanessa
+    - Amanda
+    - Ariana
+    - Rebecca
+    - Caroline
+    - Amelia
+    - Mariah
+    - Jordan
+    - Jocelyn
+    - Arianna
+    - Isabel
+    - Marissa
+    - Autumn
+    - Melanie
+    - Aaliyah
+    - Gracie
+    - Claire
+    - Isabelle
+    - Molly
+    - Mya
+    - Diana
+    - Katie
+    - Leslie
+    - Amber
+    - Danielle
+    - Melissa
+    - Sierra
+    - Madelyn
+    - Addison
+    - Bailey
+    - Catherine
+    - Gianna
+    - Amy
+    - Erin
+    - Jade
+    - Angela
+    - Gabriela
+    - Jacqueline
+    - Shelby
+    - Kennedy
+    - Lydia
+    - Alondra
+    - Adriana
+    - Daniela
+    - Natalia
+    - Breanna
+    - Kathryn
+    - Briana
+    - Ashlyn
+    - Rylee
+    - Eva
+    - Kendall
+    - Peyton
+    - Ruby
+    - Alexandria
+    - Sophie
+    - Charlotte
+    - Reagan
+    - Valeria
+    - Christina
+    - Summer
+    - Kate
+    - Mikayla
+    - Naomi
+    - Layla
+    - Miranda
+    - Laura
+    - Ana
+    - Angel
+    - Alicia
+    - Daisy
+    - Ciara
+    - Margaret
+    - Aubrey
+    - Zoey
+    - Skylar
+    - Genesis
+    - Payton
+    - Courtney
+    - Kylee
+    - Kiara
+    - Alexia
+    - Jillian
+    - Lindsey
+    - Mckenzie
+    - Karen
+    - Giselle
+    - Mariana
+    - Valerie
+    - Sabrina
+    - Alana
+    - Serenity
+    - Kelsey
+    - Cheyenne
+    - Juliana
+    - Lucy
+    - Kelly
+    - Sadie
+    - Bianca
+    - Kyra
+    - Nadia
+    - Lilly
+    - Caitlyn
+    - Jasmin
+    - Ellie
+    - Hope
+    - Cassandra
+    - Jazmin
+    - Crystal
+    - Jordyn
+    - Cassidy
+    - Delaney
+    - Liliana
+    - Angelica
+    - Caitlin
+    - Kyla
+    - Jayla
+    - Adrianna
+    - Tiffany
+    - Abby
+    - Carly
+    - Chelsea
+    - Camila
+    - Erica
+    - Makenzie
+    - Karla
+    - Cadence
+    - Paris
+    - Veronica
+    - Mckenna
+    - Brenda
+    - Bella
+    - Maggie
+    - Karina
+    - Esmeralda
+    - Erika
+    - Makenna
+    - Julianna
+    - Elena
+    - Mallory
+    - Jamie
+    - Alejandra
+    - Cynthia
+    - Ariel
+    - Vivian
+    - Jayden
+    - Amaya
+    - Dakota
+    - Elise
+    - Haylee
+    - Josephine
+    - Aniyah
+    - Bethany
+    - Keira
+    - Aliyah
+    - Laila
+    - Camryn
+    - Fatima
+    - Reese
+    - Annabelle
+    - Monica
+    - Lindsay
+    - Kira
+    - Selena
+    - Macy
+    - Hanna
+    - Heaven
+    - Clara
+    - Katrina
+    - Jazmine
+    - Jadyn
+    - Stella
+speech:
+  joke-good:
+    - "*Laughs*"
+    - "That's so funny!"
+    - "Your the best at telling jokes!"
+    - "OMG, your so funny!"
+    - "Your a great joker!"
+    - "That's the best joke I have ever heard!"
+    - "That is really funny!"
+    - "Your a real clown!"
+    - "That was too funny!"
+    - "That was so... *Laughs*"
+    - "Good one!"
+  joke-bad:
+    - "That was bad..."
+    - "OK..."
+    - "I don't get it."
+    - "That's not something to joke about!"
+    - "Say what?"
+    - "Is that the best you can come up with?"
+    - "Wow, that was awful!"
+    - "That didn't even make sense."
+    - "Was that meant to be a joke?"
+    - "OK.. I um, get it?"
+  chat-good:
+    - "Good talk"
+    - "Sounds cool!"
+    - "Nice."
+    - "That happens to the best of us."
+    - "No! Really?"
+    - "I know how you feel."
+    - "I totally agree!"
+  chat-bad:
+    - "Um, What?"
+    - "Sorry, wasn't listening."
+    - "That's great..."
+    - "Yah, well I'll see you around."
+    - "Liar."
+    - "I disagree."
+    - "That's lame."
+    - "Yah, hasn't happened to me before."
+  gift-bad:
+    - "What is this?"
+    - "That's junk."
+    - "I don't want that garbage!"
+    - "Stop giving me junk!"
+    - "No thanks."
+    - "Where did you get this, the dump?"
+  gift-small:
+    - "Thanks."
+    - "Neat, thanks."
+    - "This is a nice little gift."
+    - "This is a cool trinket."
+    - "Ill add it to my collection."
+    - "Cool."
+  gift-regular:
+    - "Wow, thanks!"
+    - "This is cool!"
+    - "I didn't get you anything..."
+    - "Thanks, this is awesome!"
+    - "Thanks for the gift."
+    - "You shouldn't have!"
+  gift-great:
+    - "This is so awesome!"
+    - "This is the best gift ever!"
+    - "I love it!"
+    - "Where did you get this!"
+    - "You're awesome!"
+    - "So cool! Thanks!"
+  gift-love:
+    - "Why thank you!"
+    - "*Blushes* thanks."
+    - "This is lovely!"
+    - "That's sweet."
+    - "Oh, its beautiful!"
+    - "Your so sweet!"
+  marry-yes:
+    - "I do!"
+    - "Yes! Of course!"
+    - "I love you!"
+    - "I will be yours for ever!"
+    - "Yes, I will marry you!"
+    - "Till death do us part!"
+  marry-no:
+    - "I'm gonna say no."
+    - "No"
+    - "Are you crazy?"
+    - "I barely know you."
+    - "I'm not ready."
+    - "Its too soon."
+    - "My father would not approve."
+  marry-cant:
+    - "You're already married!"
+    - "I can see your ring."
+    - "You have to get divorced first."
+    - "I can't, your married."
+    - "Don't do this to me."
+    - "What? You're already married!"
+  greet-good:
+    - "Howdy"
+    - "Good day."
+    - "Nice to see you."
+    - "You have a firm shake."
+    - "Whats up?"
+    - "How are you?"
+  greet-bad:
+    - "It is not nice to see you,"
+    - "Your so dirty!"
+    - "This is awkward"
+    - "Um, yah hi..."
+    - "I'm not shaking your hand."
+    - "Really, a greeting?"
+  kiss-good:
+    - "*Blushes*"
+    - "Ohh, your so warm."
+    - "Mmmmmm."
+    - "Your lips are so soft..."
+    - "*Blushes* Your a good kisser."
+    - "Lets do that again."
+    - "You taste wonderful."
+  kiss-bad:
+    - "*Smack*"
+    - "I barely know you."
+    - "How dare you!"
+    - "Your the third person to kiss me today."
+    - "Eww, your so sloppy."
+    - "Way too much tongue."
+    - "Get away from me!"
+  story-good:
+    - "Wow, that must of been fun!"
+    - "Really? You and Syndicate did that?"
+    - "What adventures you've had!"
+    - "You did all that with a stick?"
+    - "Incredible!"
+    - "Best, story, ever!"
+    - "That sound dangerous!"
+    - "Can I come with you next time?"
+    - "*Laughs* that sound like a lot of fun"
+    - "*Laughs* You're alright, <player>"
+  story-bad:
+    - "Not buying it..."
+    - "Stop making things up."
+    - "Um, What?"
+    - "Sorry, wasn't listening."
+    - "You did want with the who now?"
+    - "That's great..."
+    - "Yah, well I'll see you around."
+    - "Liar."
+    - "I know you never did that!"
+    - "That was a pathetic lie."
+  flirt-good:
+    - "*Blushes* Oh, my."
+    - "*Giggles* You're cute."
+    - "You should come over to my place some time."
+    - "Oh my, your so hot!"
+    - "Oh yah baby!"
+    - "Right back at you hot stuff!"
+    - "Why thank you, *Giggles*"
+    - "You really thing so? *Blushes*"
+    - "We should go out sometime."
+    - "Your sweet."
+    - "You know it."
+  flirt-bad: 
+    - "That was bad."
+    - "Not interested."
+    - "I bet you say that to all the <sex>s"
+    - "Just stay away from me."
+    - "Ewwww."
+    - "Nice try."
+  procreate-yes:
+    - "Come here!"
+    - "Ohhhhh! ohhhh!"
+    - "Lets make a baby!"
+    - "I want to kiss every inch of you!"
+    - "Lets make a baby!"
+    - "Make me shout your name!"
+    - "I have always wanted kids!"
+  procreate-no:
+    - "Hands off!"
+    - "I don't know you that well!"
+    - "Not in the mood."
+    - "I don't like you that way."
+    - "No way!"
+    - "I don't think so."
+    - "Get away you perv!"
+  drunk:
+    - "Don't.. Ahh."
+    - "Ohh, <player>! Please stop!"
+    - "Stop please!"
+    - "Please stop <player>! Please!"
+    - "Nooo.."
+    - "Please..."
+    - "Stop, Stop it!"
+  aid-yes:
+    - "Sure, I can help."
+    - "Here you go."
+    - "will this help?"
+    - "Here is a little something."
+    - "I can lend a hand."
+    - "That's what are friends are for."
+  aid-no:
+    - "Can't sorry."
+    - "I need help myself."
+    - "I'm busy right now."
+    - "Sorry, I don't have anything."
+    - "I don't have anything for myself."
+    - "If anything I need your help."
+  punch:
+    - "Don't you dare touch me again!"
+    - "Ohh, <player>! Please stop!"
+    - "Stop please!"
+    - "Please stop <player>! Please!"
+    - "Ouch!"
+    - "How dare you!"
+    - "Get away from me!"
+  insult:
+    - "That was rude!"
+    - "That was mean!"
+    - "You're a real a-hole!"
+    - "That was a nasty thing to say!"
+    - "Whatever."
+    - "Why did you just say that?"
+  follow:
+    - "Lead the way."
+    - "Im coming."
+    - "Where are we going?"
+    - "I will follow your lead."
+    - "Lets go!"
+speechSpouse:
+  chat-good:
+    - "Sounds like you had a hard day."
+    - "Everything is fine around here."
+    - "Nice, did you bring any for me?"
+    - "That happens to the best of us."
+    - "You should do that for me sometime."
+    - "I know how you feel."
+    - "I totally agree!"
+  chat-bad:
+    - "Don't you want to hear what I have to say?"
+    - "Sorry, wasn't listening."
+    - "You shouldn't be doing that!"
+    - "I'm kind of busy right now."
+    - "You talk too much."
+    - "I don't agree with you."
+    - "I'm in a hurry, can't chat!"
+    - "Yah, hasn't happened to me before."
+  divorce:
+    - "I'm taking the house!"
+    - "I knew you were cheating on me!"
+    - "I don't want to see you ever again!"
+    - "Get far away from me!"
+    - "Why are you doing this to me!"
+    - "Am I not good enough for you?"
+    - "You told me you lived me!"
+    - "Your a horrible person!"
+    - "I'm too good for you anyway!"
+  gift-bad:
+    - "No thanks."
+    - "I have one of these already."
+    - "Stop giving me junk! You should know what I like."
+    - "Why are you giving me garbage?"
+    - "This is what you call a gift?"
+    - "You know I don't like these!"
+    - "Where did you get this, the dump?"
+  gift-great:
+    - "This must have been expensive!"
+    - "You remembered! Thank you!"
+    - "I love it!"
+    - "I really shouldn't take it...but it's so shiny!"
+    - "I will hold this dear forever."
+    - "Thanks sweetheart, you really know me."
+    - "Where did you get this! I love it!"
+    - "You're sexy and I know it."
+    - "You're and awesome partner!"
+  gift-regular:
+    - "This is great!"
+    - "You shouldn't have!"
+    - "I can use this."
+    - "You know just what I like!"
+    - "Thanks, this is nice of you."
+    - "That was very sweet."
+    - "I didn't get you anything..."
+  gift-small:
+    - "Thanks."
+    - "I appreciate this."
+    - "It's the thought that counts."
+    - "You're sweet."
+    - "You didn't have to get me anything. "
+    - "This is a nice trinket."
+  gift-love:
+    - "Why thank you honey!"
+    - "Its beautiful!"
+    - "That's sweet!"
+    - "Oh! Thank you!"
+    - "Just like when we were dating!"
+    - "This reminds me of our first kiss..."
+    - "Honey, its beautiful!"
+    - "Now I'm turned on..."
+  punch:
+    - "Ow! How dare you!"
+    - "You didn't mean to do that did you!"
+    - "That really hurts!"
+    - "Stop hitting me!"
+    - "Stop it!"
+    - "Please! Stop!"
+    - "Why do you want to hit me!"
+  joke-good:
+    - "*Laughs*"
+    - "That's so funny!"
+    - "Your the best at telling jokes!"
+    - "OMG, your so funny!"
+    - "That's the best joke I have ever heard!"
+    - "Your a real clown!"
+    - "That was too funny!"
+  joke-bad:
+    - "That was bad..."
+    - "OK..."
+    - "I don't get it."
+    - "That's not something to joke about!"
+    - "Is that the best you can come up with?"
+    - "Wow, that was awful!"
+    - "That didn't even make sense."
+    - "OK.. I um, get it?"
+  procreate-yes:
+    - "Come here!"
+    - "Ohhhhh! ohhhh!"
+    - "Lets make a baby!"
+    - "I want to kiss every inch of you!"
+    - "I hope its a boy!"
+    - "Make me shout your name!"
+    - "I have always wanted kids!"
+    - "I hope its a girl!"
+  procreate-no:
+    - "Not now."
+    - "Maybe later."
+    - "Treat me better first."
+    - "Not in the mood."
+    - "I'm um, busy right now."
+    - "No way!"
+    - "I don't think so."
+    - "Get away you perv!"
+  kiss-good:
+    - "Ohh, your so warm."
+    - "I love you, too."
+    - "Mmmmmm."
+    - "Your lips are so soft..."
+    - "You really turn me on..."
+    - "Lets do that again."
+    - "You taste wonderful."
+  kiss-bad:
+    - "I'm not in the mood right now."
+    - "Oh, now you want to kiss."
+    - "OK, not now, I'm busy."
+    - "I don't think so."
+    - "Just, go do something away from me."
+    - "You kissed my nose..."
+    - "Ewe, your so sloppy."
+    - "Way too much tongue."
+  greet-good:
+    - "Hey honey."
+    - "How is your day going?"
+    - "Greetings love."
+    - "Love you too!"
+    - "Whats up?"
+    - "*Kiss* I love you."
+  greet-bad:
+    - "Your in the way."
+    - "Your so dirty."
+    - "Really, a greeting?"
+    - "Shouldn't you be working?"
+    - "Yes, I see you!"
+    - "I'm not shaking your hand."
+  story-good:
+    - "Wow, that must of been fun!"
+    - "Really? You and Syndicate did that?"
+    - "What adventures you've had!"
+    - "You did all that with a stick?"
+    - "That's interesting."
+    - "Best, story, ever!"
+    - "That sound dangerous!"
+    - "Can I come with you next time?"
+    - "*Laughs* that sound like a lot of fun"
+    - "*Blushes* that happened to me, except I wasn't in a closet."
+  story-bad:
+    - "I know you never did that."
+    - "Stop making things up."
+    - "You did not!"
+    - "Sorry, wasn't listening."
+    - "You did want with who!"
+    - "Don't ever do that again"
+    - "That was not very interesting."
+    - "I know you never did that!"
+    - "That was a pathetic lie."
+  flirt-good:
+    - "*Blushes* Oh, my."
+    - "You sound just like when we were dating."
+    - "*Blushes*"
+    - "Oh my, your so hot!"
+    - "Still a sweet talker."
+    - "Right back at you hot stuff!"
+    - "Why thank you."
+    - "You really thing so? *Blushes*"
+    - "Your sweet."
+    - "You know it."
+  flirt-bad: 
+    - "That was bad."
+    - "Were already married..."
+    - "You already got me."
+    - "Enough of that."
+    - "Not today."
+    - "Nice try."
+  insult:
+    - "That was rude!"
+    - "That was mean!"
+    - "You're a real a-hole!"
+    - "Don't talk to me like that!"
+    - "Just shut up!"
+    - "Why did you just say that?"
+  follow:
+    - "Lead the way."
+    - "I'm coming."
+    - "Where are we going?"
+    - "Coming honey."
+    - "Lets go!"
+speechChild:
+  chat-bad:
+    - "Can't you just leave me alone!"
+    - "Go away <parent>, I'm busy!"
+    - "You're so boring!"
+    - "<parent2> said that word is bad!"
+    - "Can't you see I'm playing here!"
+    - "Huh?"
+    - "I want to take a nap."
+  chat-good:
+    - "I'm doing good."
+    - "That's awesome <parent>! Will you take me with you next time?"
+    - "I want to fight zombies!"
+    - "I want to be a cave explorer!"
+    - "That sounds so cool!"
+    - "How did you do that?"
+    - "Really? Can I come next time?"
+    - "You're the best <parent> in the world!"
+  joke-bad:
+    - "<parent>, you said a bad word!"
+    - "What does that mean?"
+    - "I don't get it."
+    - "Zombies won't get <parent2>! *Cries*"
+    - "Don't make fun of me!"
+    - "You say that one all the time."
+    - "That didn't make any sense."
+  joke-good:
+    - "You're so funny <parent>."
+    - "*Laughs* I get it!"
+    - "That's a good one!"
+    - "*Giggles* that was funny!"
+    - "*Giggles*"
+    - "*Laughs*"
+    - "I'm gonna tell my friends that one!"
+  gift-bad:
+    - "What is this <parent>?"
+    - "What can I do with this?"
+    - "I don't like these."
+    - "<parent>, this is a piece of junk."
+    - "I already have tons of these."
+    - "Do you want me to throw this into the garbage?"
+    - "Don't give me junk!"
+  gift-great:
+    - "This is so awesome <parent>!"
+    - "Did you get this for me?"
+    - "Thanks! I love it!"
+    - "Is this all mine!"
+    - "I have wanted one of these for a long time!"
+    - "You're the best <parent> ever!"
+  gift-regular:
+    - "I like these."
+    - "You got me a gift!"
+    - "You got this for me on your trip!"
+    - "Cool!"
+  gift-small:
+    - "This in neat."
+    - "Ill add it to my collection!"
+    - "Thanks for the present."
+    - "Cool present <parent>."
+    - "Thanks, <parent>."
+  gift-love:
+    - "Thanks <parent>"
+    - "Its beautiful!"
+    - "Oh! Thank you!"
+    - "<parent>, its beautiful!"
+    - "Its just like the one you gave <parent2>!"
+  punch:
+    - "Ouch! I'm tell <parent2> on you!"
+    - "<parent>, stop hitting me!"
+    - "<parent>, that hurts!"
+    - "Ouch! What did I do?"
+    - "Ouch! stop <parent>!"
+    - "I didn't do anything wrong!"
+    - "I'm telling on you!"
+  story-good:
+    - "That's a great story!"
+    - "I want to do that when I grow up!"
+    - "Did you ever see them again?"
+    - "I thought you only did that with <parent2>?"
+    - "You did that! Wow!"
+  story-bad:
+    - "*Cries* Why would you hurt a bunny?"
+    - "<parent2> said that is bad."
+    - "I don't want to hear any stories right now."
+    - "I don't want to die from a creeper!"
+    - "But piggies are nice!"
+  play-good:
+    - "This is so fun!"
+    - "Can <parent2> play too?"
+    - "I am winning!"
+    - "You can never beat me!"
+    - "You're really good that this game <parent>."
+  play-bad:
+    - "This is not fun."
+    - "I don't want to play right now."
+    - "I'm too old for that game."
+    - "That game is boring."
+    - "Your not as fun as <parent2>."
+  greet-good:
+    - "Hello, <parent>."
+    - "<parent2> made bread for me!"
+    - "I'm doing good."
+    - "You're home!"
+    - "Let's play!"
+  greet-bad:
+    - "What do you want?"
+    - "I'm busy!"
+    - "Your in the way!"
+    - "What now!"
+    - "Why are you gone all the time?"
+  insult:
+    - "Why did you say that?"
+    - "That was mean!"
+    - "I'm telling <parent2> on you!"
+    - "That was a nasty thing to say!"
+    - "*Cries* don't say that!"
+    - "Why did you just say that?"
+  follow:
+    - "Coming <parent2>!"
+    - "I'm coming."
+    - "Where are we going?"
+    - "Where are you taking me?"
+    - "Lets go!"
+speechLike:
+  shy-gift:
+    - "Hey, here is a flower..."
+    - "I um, think you're hot..."
+    - "Hi..."
+    - "Hi, um you're hot..."
+    - "Um, you... me...?"
+    - "You're pretty cute..."
+  fun-gift:
+    - "You're pretty cute..."
+    - "You should come over some time..."
+    - "I really like you..."
+    - "Lets go fishing together."
+    - "Here is flower, for a <nice> <sex2>."
+    - "I wanted to say that your <nice>!"
+  serious-gift:
+    - "Will you go out with me some time?"
+    - "Can I be your <sex> friend?"
+    - "I want to get to know you better."
+    - "Would you like to go out on a date?"
+    - "I spoke to your father, he is fine with us going out."
+    - "You are very <nice>."
+  friendly-gift:
+    - "Can I be your <sex> friend?"
+    - "Will you go out with me some time?"
+    - "Your soooo hot!"
+    - "Hey, <nice>!"
+    - "You're so <nice>, so I got you this flower!"
+    - "Will you go out with me <sex2>?"
+  irritable-gift:
+    - "I guess you can have this flower."
+    - "You can go out will me if you want."
+    - "I wanted to say that your <nice>!"
+    - "Will you um... Nothing."
+    - "Will you go out with me some time?"
+    - "Hi."
+  emotional-gift:
+    - "You're soooo hot!"
+    - "Please go out with me?"
+    - "I love you!"
+    - "Here is a flower to show my affection!"
+    - "*kiss*"
+    - "I hope you like this."
+  outgoing-gift:
+    - "Can I be your <sex> friend?"
+    - "Will you go out with me <sex2>?"
+    - "Wanna to back to my place?"
+    - "Do you think I'm hot?"
+    - "Here is a flower, now wanna go do it?"
+    - "Here is a <nice> flower for a <nice> <sex2>!"
+useVillagerInteractions: true
+buttons:
+  - requestAid
+  - trade
+  - interact
+  - setHome
+  - divorce
+  - adopt
+playerButtons:
+  - marry
+  - procreate
+interactions:
+  - gift
+  - chat
+  - joke
+  - greet
+  - kiss
+  - story
+  - flirt
+  - procreate
+  - insult
+  - play
+  - follow
+  - stay
+traits:
+  - Shy
+  - Fun
+  - Serious
+  - Friendly
+  - Irritable
+  - Emotional
+  - Outgoing
+moods:
+  happy5: Ecstatic
+  happy4: Cheerful
+  happy3: Happy
+  happy2: Fine
+  happy1: Okay
+  neutral1: Passive
+  sadness1: Blue
+  sadness2: Unhappy
+  sadness3: Sad
+  sadness4: Cheerless
+  sadness5: Depressed
+  anger1: Annoyed
+  anger2: Agitated
+  anger3: Mad
+  anger4: Seething
+  anger5: Infuriated
+  fatigue1: Tired
+  fatigue2: Sleepy
+  fatigue3: Fatigued
+  fatigue4: Exhausted
+  fatigue5: Comatose
+adoptMessage: "You have adopted a baby!"
+haveBabyMessage: "You already have a baby!"
+divorceMessage: "You have divorced your spouse <villager>"
+drunkMessage: "I'm feeling a bit tipsy..."
+babyMessage: "You had a baby with <player2>!"
+spawnRandomVillagers: false
+randomVillagerChance: 256
+villagerHappinessLevel: 6
+minHeartsToMarry: 100
+aidCooldown: 300
+enablePlayerMarriage: true
+autoChangeVillagers: true
+likeTimer: 30
+maxLikes: 3
+babyChance: 6
+maxSameInteraction: 5
+aidItems:
+  "DIRT": 10
+  "COBBLESTONE": 10
+  "WHITE_WOOL": 5
+  "BOOKSHELF": 2
+  "TORCH": 10
+  "PUMPKIN": 2
+  "APPLE": 5
+  "COAL": 6
+  "DIAMOND": 1
+  "IRON_INGOT": 1
+  "GOLD_INGOT": 1
+  "STRING": 3
+  "FEATHER": 2
+  "GUNPOWDER": 1
+  "WHEAT_SEEDS": 10
+  "WHEAT": 6
+  "BREAD": 1
+  "FLINT": 5
+  "SUGAR_CANE": 3
+  "EGG": 8
+  "COD": 4
+  "BONE": 2
+  "CAKE": 1
+  "COOKIE": 5
+  "MELON_SLICE": 3
+  "CHICKEN": 3
+  "GOLD_NUGGET": 5
+  "EMERALD": 1
+  "CARROT": 5
+  "POTATO": 5
+shootRadius: 15
+villagerMobs:
+- VILLAGER
+- VINDICATOR
+- EVOKER
+- WITCH
+hostileMobs:
+- ELDER_GUARDIAN
+- WITHER_SKELETON
+- STRAY
+- HUSK
+- ZOMBIE_VILLAGER
+- SKELETON_HORSE
+- ZOMBIE_HORSE
+#- DONKEY
+#- MULE
+#- EVOKER
+- VEX
+#- VINDICATOR
+- CREEPER
+- SKELETON
+- SPIDER
+- GIANT
+- ZOMBIE
+- SLIME
+- GHAST
+- PIG_ZOMBIE
+- ENDERMAN
+- CAVE_SPIDER
+- SILVERFISH
+- BLAZE
+- MAGMA_CUBE
+- ENDER_DRAGON
+- WITHER
+- BAT
+#- WITCH
+- ENDERMITE
+- GUARDIAN
+- SHULKER
+#- PIG
+#- SHEEP
+#- COW
+#- CHICKEN
+#- SQUID
+#- WOLF
+#- MUSHROOM_COW
+#- SNOWMAN
+#- OCELOT
+#- IRON_GOLEM
+#- HORSE
+#- RABBIT
+- POLAR_BEAR
+- LLAMA
+#- VILLAGER
