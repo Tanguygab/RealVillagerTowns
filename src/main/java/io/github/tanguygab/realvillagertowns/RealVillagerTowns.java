@@ -24,11 +24,11 @@ public final class RealVillagerTowns extends JavaPlugin implements Listener {
 
     @Getter private MenuUtils menuUtils;
 
-    File saveYML = new File(getDataFolder(), "saves.yml");
-    YamlConfiguration saveFile = YamlConfiguration.loadConfiguration(saveYML);
+    private final File saveYML = new File(getDataFolder(), "saves.yml");
+    public YamlConfiguration saveFile = YamlConfiguration.loadConfiguration(saveYML);
 
-    File langYML = new File(getDataFolder(), "lang.yml");
-    YamlConfiguration langFile = YamlConfiguration.loadConfiguration(langYML);
+    private final File langYML = new File(getDataFolder(), "lang.yml");
+    private YamlConfiguration langFile = YamlConfiguration.loadConfiguration(langYML);
 
     Map<String, Integer> aidMap = new HashMap<>();
     Map<String, UUID> giftMap = new HashMap<>();
@@ -54,9 +54,9 @@ public final class RealVillagerTowns extends JavaPlugin implements Listener {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-        if (!(new File(getDataFolder(), "lang.yml")).exists()) {
+        if (!langYML.exists()) {
             getLogger().log(Level.INFO, "No lang.yml found, generating...");
-            isSave(getClass().getResourceAsStream("lang.yml"), "lang.yml");
+            isSave(getClass().getClassLoader().getResourceAsStream("lang.yml"), "lang.yml");
             getLogger().log(Level.INFO, "Lang successfully generated!");
         }
         reloadLang();
@@ -91,8 +91,6 @@ public final class RealVillagerTowns extends JavaPlugin implements Listener {
         Bukkit.addRecipe(sr);
     }
     public void reloadLang() {
-        if (langYML == null)
-            langYML = new File(getDataFolder(), "lang.yml");
         langFile = YamlConfiguration.loadConfiguration(langYML);
         YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(langYML);
         langFile.setDefaults(defConfig);
@@ -273,7 +271,7 @@ public final class RealVillagerTowns extends JavaPlugin implements Listener {
         followMap.remove(v);
     }
 
-    private String getLang(String str) {
+    public String getLang(String str) {
         return langFile.getString("lang." + str).replace("&", "§");
     }
 

@@ -159,6 +159,6 @@ public class MenuUtils {
 
 
     private String getLang(String str) {
-        return rvt.langFile.getString("lang."+str).replace("&", "§");
+        return rvt.getLang(str);
     }
 }
