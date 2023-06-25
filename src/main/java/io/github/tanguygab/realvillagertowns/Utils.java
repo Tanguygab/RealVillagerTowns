@@ -112,9 +112,13 @@ public class Utils {
         };
     }
 
-    public static String getListItem(String listName, RealVillagerTowns rvt) {
-        List<String> list = rvt.getConfig().getStringList(listName);
+    public static String getListItem(String listName) {
+        List<String> list = RealVillagerTowns.getInstance().getConfig().getStringList(listName);
         int index = random.nextInt(list.size());
         return list.get(index).toLowerCase();
+    }
+
+    public static String colors(String str) {
+        return ChatColor.translateAlternateColorCodes('&',str);
     }
 }

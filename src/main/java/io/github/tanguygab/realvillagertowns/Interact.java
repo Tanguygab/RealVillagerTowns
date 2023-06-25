@@ -8,8 +8,6 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.util.Vector;
 
-import java.util.Random;
-
 public class Interact {
 
     private final RealVillagerTowns rvt;
@@ -19,14 +17,14 @@ public class Interact {
     }
 
     public void interact(Player p, LivingEntity v, String type) {
-        int hearts = rvt.saveFile.getInt("players." + p.getUniqueId() + ".happiness." + v.getUniqueId(),0);
+        int hearts = rvt.data.getInt("players." + p.getUniqueId() + ".happiness." + v.getUniqueId(),0);
         int min = 1;
         int max = rvt.getConfig().getInt("villagerHappinessLevel");
         if (v instanceof Villager villager && villager.getProfession() == Villager.Profession.NITWIT) max -= 5;
-        if (rvt.drunkMap.get(v.getUniqueId().toString()) != null) max -= Utils.random(1, 3);
-        boolean likes = p.getUniqueId().toString().equals(rvt.saveFile.getString("villagers." + v.getUniqueId() + ".likes"));
+        if (rvt.drunkMap.get(v.getUniqueId()) != null) max -= Utils.random(1, 3);
+        boolean likes = p.getUniqueId().toString().equals(rvt.data.getString("villagers." + v.getUniqueId() + ".likes"));
 
-        String mood = rvt.getMood(v.getUniqueId().toString());
+        String mood = rvt.getMood(v.getUniqueId());
         int tmp = Integer.parseInt(mood.substring(mood.length()-1));
         mood = mood.substring(0,mood.length()-1);
         switch (mood) {
@@ -48,7 +46,7 @@ public class Interact {
                 max -= tmp;
             }
         }
-        String trait = rvt.saveFile.getString("villagers." + v.getUniqueId() + ".trait");
+        String trait = rvt.data.getString("villagers." + v.getUniqueId() + ".trait");
         if (rvt.sameCheck(p, type)) max += 6;
         switch (type) {
             case "story","chat","joke","play" -> play(p,v,type,trait,max,min,hearts);
@@ -57,7 +55,7 @@ public class Interact {
             case "kiss" -> kiss(p,v,likes,trait,max,min,hearts);
             case "insult" -> insult(p,v);
             case "follow" -> follow(p,v);
-            case "stop" -> stop(v);
+            case "stopFollow" -> stopFollow(v);
             case "stay" -> v.addPotionEffect(new PotionEffect(PotionEffectType.SLOW, 998001, 257));
             case "move" -> v.removePotionEffect(PotionEffectType.SLOW);
         }
@@ -185,7 +183,7 @@ public class Interact {
         DisguiseAPI.disguiseToAll(w, mobDisguise);
         w.setVelocity(new Vector(0.0D, 0.1D, 0.0D));
     }
-    private void stop(LivingEntity v) {
+    private void stopFollow(LivingEntity v) {
         for (Entity near : v.getNearbyEntities(5.0D, 5.0D, 5.0D))
             if (!near.getPassengers().isEmpty() && near.getPassengers().get(0).equals(v)) {
                 near.remove();
