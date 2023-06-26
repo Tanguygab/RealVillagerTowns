@@ -1,11 +1,12 @@
 package io.github.tanguygab.realvillagertowns.menus.procreate;
 
 import io.github.tanguygab.realvillagertowns.menus.AskMenu;
+import io.github.tanguygab.realvillagertowns.villagers.RVTPlayer;
 import org.bukkit.entity.Player;
 
 public class ProcreateAnswerMenu extends AskMenu {
 
-    public ProcreateAnswerMenu(Player proposer, Player target) {
+    public ProcreateAnswerMenu(RVTPlayer proposer, RVTPlayer target) {
         super(target,proposer,"Procreate?","procreate with "+proposer.getName());
     }
 

@@ -1,11 +1,12 @@
 package io.github.tanguygab.realvillagertowns.menus.marry;
 
 import io.github.tanguygab.realvillagertowns.menus.AskMenu;
+import io.github.tanguygab.realvillagertowns.villagers.RVTPlayer;
 import org.bukkit.entity.Player;
 
 public class MarryAnswerMenu extends AskMenu {
 
-    public MarryAnswerMenu(Player proposer, Player target) {
+    public MarryAnswerMenu(RVTPlayer proposer, RVTPlayer target) {
         super(target,proposer,"Accept proposal?","marry "+proposer.getName());
     }
 

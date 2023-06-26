@@ -5,11 +5,10 @@ import io.github.tanguygab.realvillagertowns.menus.VillagerMenu;
 import io.github.tanguygab.realvillagertowns.menus.marry.MarryMenu;
 import io.github.tanguygab.realvillagertowns.menus.procreate.ProcreateMenu;
 import io.github.tanguygab.realvillagertowns.villagers.Gender;
+import io.github.tanguygab.realvillagertowns.villagers.RVTPlayer;
 import io.github.tanguygab.realvillagertowns.villagers.RVTVillager;
 import io.github.tanguygab.realvillagertowns.villagers.VillagerManager;
-import org.bukkit.Bukkit;
 import org.bukkit.Material;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
@@ -18,31 +17,21 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.PlayerInventory;
 
 import java.util.List;
 import java.util.UUID;
 
-public class PlayerInteractListener implements Listener {
-
-    private final RealVillagerTowns rvt;
-    private final VillagerManager vm;
-    private final FileConfiguration config;
-
-    public PlayerInteractListener(RealVillagerTowns rvt) {
-        this.rvt = rvt;
-        vm = rvt.getVillagerManager();
-        config = rvt.getConfig();
-    }
+public record PlayerInteractListener(RealVillagerTowns rvt, VillagerManager vm) implements Listener {
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEntityEvent e) {
         Player p = e.getPlayer();
+        RVTPlayer player = vm.getPlayer(p);
         if (!(e.getRightClicked() instanceof LivingEntity clicked)) return;
-        if (!rvt.tradeList.contains(p.getName())
+        if (!player.isTrading()
                 && vm.isVillagerEntity(e.getRightClicked())
                 && vm.USE_VILLAGER_INTERACTIONS
-                && !rvt.interactList.contains(p.getUniqueId().toString())
+                && !player.isInteracting()
                 && !clicked.hasMetadata("NPC")
                 && !clicked.hasMetadata("shopkeeper")) {
             e.setCancelled(true);
@@ -58,17 +47,16 @@ public class PlayerInteractListener implements Listener {
                         nice = "handsome";
                         type = "boy";
                     }
-                    p.sendMessage(rvt.getText(trait.toLowerCase() + "-gift", "Like", p, clicked).replace("<nice>", nice).replace("<sex2>", type));
-                    rvt.giveItem(clicked, null);
+                    player.sendMessage(rvt.getText(trait.toLowerCase() + "-gift", "Like", player, villager)
+                            .replace("<nice>", nice).replace("<sex2>", type));
+                    rvt.giveItem(villager, null);
                     return;
                 }
             }
-            if (rvt.giftMap.get(p.getName()) != null && (rvt.giftMap.get(p.getName())).equals(clicked.getUniqueId())) {
-                rvt.giveGift(p, clicked);
-                rvt.giftMap.remove(p.getName());
-                String id = p.getUniqueId().toString();
-                rvt.interactList.add(id);
-                Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(rvt, () -> rvt.interactList.remove(id),  3L);
+            if (player.getGifting() == villager) {
+                rvt.giveGift(player, villager);
+                player.setInteracting(true);
+                rvt.getServer().getScheduler().scheduleSyncDelayedTask(rvt, () -> player.setInteracting(false),  3L);
                 return;
             }
             ItemStack item = p.getInventory().getItemInMainHand();
@@ -77,34 +65,33 @@ public class PlayerInteractListener implements Listener {
                     item.setAmount(item.getAmount() - 1);
                 else p.getInventory().setItemInMainHand(null);
             }
-            new VillagerMenu(p, clicked).onOpen();
+            new VillagerMenu(player, villager).onOpen();
             return;
         }
-        if (clicked instanceof Player pClicked && config.getBoolean("enablePlayerMarriage")) {
+        if (clicked instanceof Player pClicked && rvt.getConfig().getBoolean("enablePlayerMarriage")) {
             e.setCancelled(true);
-            clickedPlayer(p,pClicked);
+            clickedPlayer(player,pClicked);
             return;
         }
         if (clicked instanceof Wolf wolf) {
             clickedWolf(wolf, e.getRightClicked().getPassengers());
             return;
         }
-        if (rvt.tradeList.contains(p.getName()))
-            Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(rvt, () -> rvt.tradeList.remove(p.getName()),  20L);
+        if (player.isTrading()) rvt.getServer().getScheduler().scheduleSyncDelayedTask(rvt, () -> player.setTrading(false),  20L);
     }
 
-    private void clickedPlayer(Player player, Player clicked) {
-        if (clicked.getUniqueId() == vm.getPlayer(player).getPartner()) {
-            new ProcreateMenu(player,clicked).onOpen();
+    private void clickedPlayer(RVTPlayer player, Player clicked) {
+        if (clicked.getUniqueId() == player.getPartner()) {
+            new ProcreateMenu(player,vm.getPlayer(clicked)).onOpen();
             return;
         }
-        if (config.getList("playerButtons").contains("marry"))
-            new MarryMenu(player,clicked).onOpen();
+        if (rvt.getConfig().getList("playerButtons").contains("marry"))
+            new MarryMenu(player,vm.getPlayer(clicked)).onOpen();
     }
     private void clickedWolf(Wolf wolf, List<Entity> passengers) {
         if (passengers.isEmpty() || !vm.isVillagerEntity(passengers.get(0))) return;
         wolf.remove();
-        rvt.stopFollow((LivingEntity) passengers.get(0));
+        vm.getVillager(passengers.get(0)).stopFollow();
     }
 
 }

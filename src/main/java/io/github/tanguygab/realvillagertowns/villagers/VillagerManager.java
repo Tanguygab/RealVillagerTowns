@@ -2,6 +2,7 @@ package io.github.tanguygab.realvillagertowns.villagers;
 
 import io.github.tanguygab.realvillagertowns.RealVillagerTowns;
 import io.github.tanguygab.realvillagertowns.Utils;
+import lombok.Getter;
 import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.disguisetypes.PlayerDisguise;
 import org.bukkit.Location;
@@ -19,8 +20,8 @@ public class VillagerManager {
     private final RealVillagerTowns rvt;
     private final FileConfiguration data;
     private final List<EntityType> villagersEntityTypes = new ArrayList<>();
-    private final Map<UUID,RVTVillager> villagers = new HashMap<>();
-    private final Map<UUID,RVTPlayer> players = new HashMap<>();
+    @Getter private final Map<UUID,RVTVillager> villagers = new HashMap<>();
+    @Getter private final Map<UUID,RVTPlayer> players = new HashMap<>();
 
     private final boolean AUTO_CHANGE_VILLAGERS;
     private final boolean USE_NAMES;
@@ -62,9 +63,9 @@ public class VillagerManager {
         return isVillagerEntity(entity) && villagers.containsKey(entity.getUniqueId());
     }
     public void makeVillager(LivingEntity entity) {
-        if (!isVillager(entity) && !AUTO_CHANGE_VILLAGERS) return;
+        if (!data.contains("villagers."+entity.getUniqueId()) && !AUTO_CHANGE_VILLAGERS) return;
         RVTVillager villager = data.contains("villagers."+entity.getUniqueId()) ? loadVillager(entity) : createVillager(entity);
-        rvt.disguise(entity);
+        disguise(villager);
         villagers.put(villager.getUniqueId(),villager);
     }
 
@@ -102,25 +103,19 @@ public class VillagerManager {
                 cfg.getString("title"),
                 cfg.getString("trait"));
 
-
         if (cfg.contains("parent")) {
             RVTEntityType parentType = RVTEntityType.valueOf(cfg.getString("parent.type"));
             UUID parent1 = UUID.fromString(cfg.getString("parent.parent1"));
-            UUID parent2 = UUID.fromString(cfg.getString("parent.parent2"));
-            villager.setParentType(parentType);
-            villager.setParent1(parent1);
-            villager.setParent2(parent2);
+            UUID parent2 = cfg.contains("parent2") ? UUID.fromString(cfg.getString("parent.parent2")) : null;
+            villager.setParent(parentType,parent1,parent2);
         }
         if (cfg.contains("partner")) {
             RVTEntityType type = RVTEntityType.valueOf(cfg.getString("partner.type"));
             UUID partner = UUID.fromString(cfg.getString("partner.uuid"));
-            villager.setPartnerType(type);
-            villager.setPartner(partner);
+            villager.marry(partner,type);
         }
-        if (cfg.contains("children")) {
-            List<UUID> children = cfg.getStringList("children").stream().map(UUID::fromString).toList();
-            villager.setChildren(children);
-        }
+        if (cfg.contains("children")) cfg.getStringList("children").forEach(uuid->villager.getChildren().add(UUID.fromString(uuid)));
+
         if (cfg.contains("home")) {
             ConfigurationSection home = cfg.getConfigurationSection("home");
             World world = rvt.getServer().getWorld(home.getString("world"));
@@ -132,8 +127,7 @@ public class VillagerManager {
         if (cfg.contains("likes")) villager.setLikes(UUID.fromString(cfg.getString("likes")));
         if (cfg.contains("item")) villager.setInHand(Material.getMaterial(cfg.getString("item")));
         villager.setDrunk(cfg.getInt("drunk",0));
-        villager.setMood(Mood.valueOf(cfg.getString("mood")));
-        villager.setMoodLevel(cfg.getInt("mood-level",1));
+        villager.setMood(Mood.valueOf(cfg.getString("mood")),cfg.getInt("mood-level",1));
         return villager;
     }
 
@@ -182,25 +176,15 @@ public class VillagerManager {
         if (cfg.contains("partner")) {
             RVTEntityType type = RVTEntityType.valueOf(cfg.getString("partner.type"));
             UUID partner = UUID.fromString(cfg.getString("partner.uuid"));
-            player.setPartnerType(type);
-            player.setPartner(partner);
+            player.marry(partner,type);
         }
-        if (cfg.contains("children")) {
-            List<UUID> children = cfg.getStringList("children").stream().map(UUID::fromString).toList();
-            player.setChildren(children);
-        }
-        player.setHasBaby(cfg.getBoolean("has-baby"));
-        if (cfg.contains("likes")) {
-            List<UUID> likes = cfg.getStringList("likes").stream().map(UUID::fromString).toList();
-            player.setLikes(likes);
-        }
+        if (cfg.contains("children")) cfg.getStringList("children").forEach(uuid->player.getChildren().add(UUID.fromString(uuid)));
+        if (cfg.getBoolean("has-baby")) player.setBaby(UUID.fromString(cfg.getString("baby")));
+        if (cfg.contains("likes")) cfg.getStringList("likes").forEach(uuid->player.getLikes().add(UUID.fromString(uuid)));
+
         if (cfg.contains("happiness")) {
             Map<String,Object> map = cfg.getConfigurationSection("happiness").getValues(false);
-            if (!map.isEmpty()) {
-                Map<UUID,Integer> happiness = new HashMap<>();
-                map.forEach((uuid,lvl)->happiness.put(UUID.fromString(uuid),(int)lvl));
-                player.setHappiness(happiness);
-            }
+            if (!map.isEmpty()) map.forEach((uuid,lvl)->player.getHappiness().put(UUID.fromString(uuid), (int) lvl));
         }
         players.put(id,player);
     }
@@ -223,6 +207,31 @@ public class VillagerManager {
         cfg.set("happiness",happiness.isEmpty() ? null : happiness);
     }
 
+    public RVTVillager getVillager(Entity entity) {
+        return villagers.get(entity.getUniqueId());
+    }
+    public RVTVillager getVillager(UUID uuid) {
+        return villagers.get(uuid);
+    }
+    public RVTPlayer getPlayer(Player p) {
+        return p == null ? null : players.get(p.getUniqueId());
+    }
+    public RVTPlayer getPlayer(UUID uuid) {
+        return players.get(uuid);
+    }
+
+    public void disguise(RVTVillager villager) {
+        if (villager.isBaby()) return;
+
+        PlayerDisguise disguise = new PlayerDisguise(villager.getName(),villager.getSkin());
+        Material hand = villager.getInHand();
+        if (hand != null) {
+            disguise.getWatcher().setItemInMainHand(new ItemStack(hand));
+            if (hand == Material.BOW) rvt.shootArrows(villager.getEntity());
+        }
+        DisguiseAPI.disguiseToAll(villager.getEntity(), disguise);
+    }
+
     public void villagerDeath(LivingEntity v) {
         UUID id = v.getUniqueId();
         RVTVillager villager = villagers.get(id);
@@ -231,13 +240,12 @@ public class VillagerManager {
             UUID partnerUUID = villager.getPartner();
             if (players.containsKey(partnerUUID)) {
                 RVTPlayer partner = players.get(partnerUUID);
-                partner.setPartnerType(null);
-                partner.setPartner(null);
+                partner.divorce();
 
                 partner.getPlayer().sendMessage("§cYour "+(villager.getGender() == Gender.FEMALE ? "wife" : "husband")+" " + villager.getName() + " has died!");
             } else {
-                data.set("players." + partnerUUID + ".married", null);
-                data.set("players." + partnerUUID + ".partner", null);
+                rvt.set("players." + partnerUUID + ".married", null);
+                rvt.set("players." + partnerUUID + ".partner", null);
             }
         }
         if (villager.getParentType() == RVTEntityType.PLAYER) {
@@ -245,61 +253,48 @@ public class VillagerManager {
             if (players.containsKey(parentUUID)) {
                 RVTPlayer parent = players.get(parentUUID);
                 if (parent.getBaby().equals(id)) {
-                    parent.setBaby(null);
-                    parent.setHasBaby(false);
+                    parent.clearBaby();
                 }
                 parent.getChildren().remove(id);
 
                 parent.getPlayer().sendMessage("§cYour "+(villager.getGender() == Gender.FEMALE ? "daughter" : "son")+" " + villager.getName() + " has died!");
             } else {
-                data.set("players." + parentUUID + ".hasBaby", false);
-                data.set("players." + parentUUID + ".baby", null);
+                rvt.set("players." + parentUUID + ".hasBaby", false);
+                rvt.set("players." + parentUUID + ".baby", null);
                 List<String> children = data.getStringList("players." + parentUUID + ".children");
                 children.remove(id.toString());
-                data.set("players." + parentUUID + ".children",children);
+                rvt.set("players." + parentUUID + ".children",children);
             }
         }
-        data.set("villagers." + id, null);
+        rvt.set("villagers." + id, null);
     }
 
-    public RVTVillager getVillager(Entity entity) {
-        return villagers.get(entity.getUniqueId());
-    }
+    public void procreate(RVTPlayer player, RVTVillager villager) {
+        if (player.getGender() == villager.getGender() || player.isHasBaby()) return;
+        boolean baby = Utils.random(1, rvt.getConfig().getInt("babyChance")) != 1;
 
-    public RVTPlayer getPlayer(Player p) {
-        return players.get(p.getUniqueId());
-    }
+        int hearts = player.getHappiness(villager);
 
-    public void disguise(LivingEntity v) {
-        UUID id = v.getUniqueId();
-        RVTVillager villager = villagers.get(id);
-        if (isBaby(v)) return;
-
-        String name = villager.getName();
-        String skin = villager.getSkin();
-        PlayerDisguise disguise = new PlayerDisguise(name,skin);
-        if (villager.getInHand() != null) {
-            Material hand = villager.getInHand();
-            disguise.getWatcher().setItemInMainHand(new ItemStack(hand));
-            if (hand == Material.BOW && !rvt.bowList.contains(v.getUniqueId())) {
-                rvt.shootArrows(v);
-                rvt.bowList.add(v.getUniqueId());
-            }
+        if (hearts > 80 || (hearts > 0 && Utils.random(1, 5) == 1)) {
+            player.speech("procreate-yes", villager);
+            loveJump(villager);
+            player.setHappiness(villager, Utils.random(-2, 10));
+            if (baby) rvt.getServer().getScheduler().scheduleSyncDelayedTask(rvt, () -> rvt.makeBaby(player, villager), 42L);
+            return;
         }
-        if (villager.getLikes() != null) {
-            UUID likes = villager.getLikes();
-            RVTPlayer player = players.get(likes);
-            if (player == null) {
-                List<String> list = data.getStringList("players."+likes+".likes");
-                list.add(villager.getUniqueId().toString());
-                data.set("players."+likes+".likes",list);
-            }
-            else player.getLikes().add(v.getUniqueId());
+        if (player.updateLastAction("procreate")) {
+            player.speech("drunk", villager);
+            loveJump(villager);
+            player.setHappiness(villager, Utils.random(-25, 0));
+            return;
         }
-        DisguiseAPI.disguiseToAll(v, disguise);
+        player.speech("procreate-no", villager);
+        player.setHappiness(villager, Utils.random(-10, 0));
+    }
+    public void loveJump(RVTVillager villager) {
+        for (int i = 0; i <= 3; i++)
+            rvt.getServer().getScheduler().scheduleSyncDelayedTask(rvt, villager::jump, i * 16L);
     }
 
-    public boolean isBaby(LivingEntity entity) {
-        return entity instanceof Ageable ageable && !ageable.isAdult();
-    }
+
 }

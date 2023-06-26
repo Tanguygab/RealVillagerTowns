@@ -1,17 +1,17 @@
 package io.github.tanguygab.realvillagertowns.menus;
 
+import io.github.tanguygab.realvillagertowns.villagers.RVTPlayer;
 import org.bukkit.Material;
-import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 
 public abstract class AskMenu extends RVTMenu {
 
-    protected final Player player2;
+    protected final RVTPlayer player2;
     private final String action;
 
-    public AskMenu(Player player, Player player2, String title, String action) {
+    public AskMenu(RVTPlayer player, RVTPlayer player2, String title, String action) {
         super(player, "&0&l"+title, InventoryType.HOPPER);
         this.player2 = player2;
         this.action = action;
@@ -23,7 +23,7 @@ public abstract class AskMenu extends RVTMenu {
         inv.setItem(1, y);
         ItemStack n = createMenuItem(Material.MAGMA_CREAM, "&cNo", "&8I don't want to", "&8"+action);
         inv.setItem(3, n);
-        player.openInventory(inv);
+        open();
     }
 
     protected abstract void onAccept();

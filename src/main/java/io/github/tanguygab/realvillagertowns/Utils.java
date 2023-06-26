@@ -9,7 +9,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.PotionMeta;
-import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionType;
 import org.bukkit.util.BlockIterator;
 
@@ -22,13 +21,10 @@ public class Utils {
     private static final Random random = new Random();
     private static final boolean is1_8 = Bukkit.getVersion().contains("1.8");
 
-    public static ItemStack getItem(Material material, String name) {
-        return getItem(material,name,1,null);
-    }
-
     public static ItemStack getItem(Material material, String name, int amount, List<String> lore) {
         ItemStack item = new ItemStack(material, amount);
         ItemMeta m = item.getItemMeta();
+        assert m != null;
         if (name != null) m.setDisplayName(name);
         if (lore != null) m.setLore(lore);
         item.setItemMeta(m);
@@ -66,17 +62,17 @@ public class Utils {
         return random.nextInt(max - min + 1) + min;
     }
 
-    public static void displayParticle(String effect, Location l, double radius, int speed, int amount) {
+    public static void displayParticle(Particle particles, Location l, double radius, int speed, int amount) {
         World w = l.getWorld();
         assert w != null;
         if (radius == 0.0D) {
-            w.spawnParticle(Particle.valueOf(effect), l, 0, 0.0D, 0.0D, speed, amount);
+            w.spawnParticle(particles, l, 0, 0.0D, 0.0D, speed, amount);
             return;
         }
         ArrayList<Location> ll = getArea(l, radius, 0.2D);
         for (int i = 0; i < amount; i++) {
             int index = random(ll.size());
-            w.spawnParticle(Particle.valueOf(effect), ll.get(index), 0, 0.0D, 0.0D, speed, 1.0D);
+            w.spawnParticle(particles, ll.get(index), 0, 0.0D, 0.0D, speed, 1.0D);
             ll.remove(index);
         }
     }
@@ -92,30 +88,27 @@ public class Utils {
         return ll;
     }
 
-    public static String getGiftType(ItemStack s) {
-        if (s.getItemMeta().getDisplayName().equals("§6Marriage Ring")) return "ring";
-        if (s.getType() == Material.BOW || s.getType() == Material.CROSSBOW) return "bow";
-        if (s.getType() == Material.POTION || (!is1_8 && (s.getType() == Material.SPLASH_POTION || s.getType() == Material.LINGERING_POTION))) {
-            PotionMeta pMeta = (PotionMeta)s.getItemMeta();
-            PotionData pd = pMeta.getBasePotionData();
-            if (pd.getType().equals(PotionType.WEAKNESS) || pd.getType().equals(PotionType.SLOWNESS) || pd.getType().equals(PotionType.POISON))
-                return "high-drunk";
-            return "regular-drunk";
+    public static GiftType getGiftType(ItemStack item) {
+        Material type = item.getType();
+        if (item.getItemMeta() != null && item.getItemMeta().getDisplayName().equals("§6Marriage Ring")) return GiftType.RING;
+        if (type == Material.BOW || type == Material.CROSSBOW) return GiftType.BOW;
+        if (type == Material.POTION || type == Material.SPLASH_POTION || (!is1_8 && type == Material.LINGERING_POTION)) {
+            PotionType potion = ((PotionMeta) item.getItemMeta()).getBasePotionData().getType();
+            return potion == PotionType.WEAKNESS || potion == PotionType.SLOWNESS || potion == PotionType.POISON ? GiftType.HIGH_DRUNK : GiftType.REGULAR_DRUNK;
         }
-        if (s.getType().equals(Material.POTION) && s.getDurability() > 0) return "regular-drunk";
-        if (s.getType() == Material.DANDELION || s.getType() == Material.POPPY) return "love";
+        if (type == Material.DANDELION || type == Material.POPPY) return GiftType.LOVE;
         return switch (Utils.random(1, 4)) {
-            case 1 -> "bad";
-            case 2 -> "small";
-            case 3 -> "regular";
-            default -> "great";
+            case 1 -> GiftType.BAD;
+            case 2 -> GiftType.SMALL;
+            case 3 -> GiftType.REGULAR;
+            default -> GiftType.GREAT;
         };
     }
 
     public static String getListItem(String listName) {
         List<String> list = RealVillagerTowns.getInstance().getConfig().getStringList(listName);
         int index = random.nextInt(list.size());
-        return list.get(index).toLowerCase();
+        return list.get(index);
     }
 
     public static String colors(String str) {

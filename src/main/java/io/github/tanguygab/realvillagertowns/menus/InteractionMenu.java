@@ -1,9 +1,10 @@
 package io.github.tanguygab.realvillagertowns.menus;
 
 import io.github.tanguygab.realvillagertowns.RealVillagerTowns;
+import io.github.tanguygab.realvillagertowns.villagers.RVTPlayer;
+import io.github.tanguygab.realvillagertowns.villagers.RVTVillager;
 import org.bukkit.Material;
 import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -13,45 +14,36 @@ import java.util.List;
 public class InteractionMenu extends RVTMenu {
 
     private final List<String> interactions;
-    private final List<String> interactionsNames = List.of("gift","chat","joke","greet","insult","story");
-    private final LivingEntity entity;
+    private static final List<String> interactionsNames = List.of("gift","chat","joke","greet","insult","story");
+    private static final List<String> interactionsClick = List.of("chat", "joke", "greet", "kiss", "story", "flirt", "insult", "play", "follow", "stopFollow", "stay", "move");
+    private final RVTVillager villager;
 
-    public InteractionMenu(Player player, LivingEntity entity) {
-        super(player, "§0§lInteract with " + RealVillagerTowns.getInstance().data.getString("villagers." + entity.getUniqueId() + ".name"), 2);
+    public InteractionMenu(RVTPlayer player, RVTVillager villager) {
+        super(player, "§0§lInteract with " + RealVillagerTowns.getInstance().data.getString("villagers." + villager.getUniqueId() + ".name"), 2);
         interactions = rvt.getConfig().getStringList("interactions");
-        this.entity = entity;
+        this.villager = villager;
     }
 
     @Override
     public void onOpen() {
         for (String interaction : interactionsNames) addItem(interaction);
-
-        if (!rvt.isChild(player, entity)) {
+        if (!player.isChild(villager)) {
             addItem("flirt");
-            if (rvt.likes(player, entity) && (rvt.data.getInt("players." + player.getUniqueId() + ".happiness." + entity.getUniqueId()) > 50
-                    || (rvt.drunkMap.get(entity.getUniqueId()) != null
-                    && rvt.drunkMap.get(entity.getUniqueId()) >= 1)))
+            if (player.likes(villager) && (player.getHappiness(villager) > 50 || villager.getDrunk() >= 1))
                 addItem("kiss");
         }
-        if (rvt.isBaby(entity)) addItem("play");
-        if (rvt.likes(player, entity) && (
-                rvt.data.getInt("players." + player.getUniqueId() + ".happiness." + entity.getUniqueId()) > 200
-                        || rvt.isMarried(player, entity)
-                        || (rvt.drunkMap.get(entity.getUniqueId()) != null
-                        && rvt.drunkMap.get(entity.getUniqueId()) >= 3)))
+        if (villager.isBaby()) addItem("play");
+        if (player.likes(villager) && (player.getHappiness(villager) > 200 || player.isMarried(villager) || villager.getDrunk() >= 3))
             addItem("procreate");
-
-        if (rvt.data.getInt("players." + player.getUniqueId() + ".happiness." + entity.getUniqueId()) > 100
-                || rvt.isChild(player, entity) || rvt.isBaby(entity) || rvt.isMarried(player, entity)) {
-
+        if (player.getHappiness(villager) > 100 || player.isChild(villager) || player.isBaby(villager) || player.isMarried(villager)) {
             if (interactions.contains("follow")) {
-                String lang = rvt.followMap.containsKey(entity) && rvt.followMap.get(entity).equals(player) ? "stopFollow" : "follow";
+                String lang = villager.getFollowed() == player ? "stopFollow" : "follow";
                 inv.addItem(createMenuItem(Material.SLIME_BALL, getLang(lang)));
             }
             if (interactions.contains("stay"))
-                inv.addItem(createMenuItem(Material.SLIME_BALL, getLang(rvt.isStaying(entity) ? "move" : "stay")));
+                inv.addItem(createMenuItem(Material.SLIME_BALL, getLang(villager.isStaying() ? "move" : "stay")));
         }
-        player.openInventory(inv);
+        open();
     }
 
     private void addItem(String name) {
@@ -66,19 +58,19 @@ public class InteractionMenu extends RVTMenu {
         String currentItem = meta.getDisplayName();
 
         if (currentItem.equals(getLang("procreate"))) {
-            rvt.procreate(player, entity);
+            vm.procreate(player, villager);
             onClose();
             return true;
         }
         if (currentItem.equals(getLang("gift"))) {
             player.sendMessage("Right-click on a villager to give them the item in your hand.");
-            rvt.giftMap.put(player.getName(), entity.getUniqueId());
+            player.setGifting(villager);
             onClose();
             return true;
         }
-        for (String interaction : List.of("chat", "joke", "greet", "kiss", "story", "flirt", "insult", "play", "follow", "stopFollow", "stay", "move"))
+        for (String interaction : interactionsClick)
             if (currentItem.equals(getLang(interaction))) {
-                rvt.getInteract().interact(player, entity, interaction);
+                rvt.getInteract().interact(player, villager, interaction);
                 onClose();
                 break;
             }

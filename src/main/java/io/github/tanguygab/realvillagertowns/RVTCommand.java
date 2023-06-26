@@ -1,20 +1,29 @@
 package io.github.tanguygab.realvillagertowns;
 
+import io.github.tanguygab.realvillagertowns.villagers.RVTPlayer;
+import io.github.tanguygab.realvillagertowns.villagers.RVTVillager;
+import io.github.tanguygab.realvillagertowns.villagers.VillagerManager;
 import lombok.NonNull;
 import org.bukkit.ChatColor;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Villager;
 
+import java.util.List;
+import java.util.Objects;
+
 public class RVTCommand implements CommandExecutor {
 
     private final RealVillagerTowns rvt;
+    private final VillagerManager vm;
 
     public RVTCommand(RealVillagerTowns rvt) {
         this.rvt = rvt;
+        vm = rvt.getVillagerManager();
     }
 
     private void sendMessage(CommandSender sender, String msg) {
@@ -26,9 +35,14 @@ public class RVTCommand implements CommandExecutor {
     }
 
     @Override
-    public boolean onCommand(@NonNull CommandSender sender, Command command, @NonNull String label, @NonNull String[] args) {
+    public boolean onCommand(@NonNull CommandSender sender, Command command, @NonNull String label, String@NonNull[] args) {
         if (command.getName().equals("bringkids")) {
-            if (sender instanceof Player p) rvt.getKids(p);
+            if (sender instanceof Player p) {
+                List<Entity> children = vm.getPlayer(p).getChildren().stream().map(uuid->rvt.getServer().getEntity(uuid)).filter(Objects::nonNull).toList();
+                children.forEach(e->e.teleport(p));
+                p.sendMessage(children.size() == 0 ? "§4RVT: §cNone of your children can be found!"
+                        : "§4RVT: §eFound " + children.size() + " children and teleported them to you.");
+            }
             else sendMessage(sender,"&cThis command can only be run by a player!");
             return true;
         }
@@ -71,8 +85,8 @@ public class RVTCommand implements CommandExecutor {
         }
         switch (arg) {
             case "skin" -> {
-                if (Utils.getTarget(p) instanceof LivingEntity v && rvt.entEnabled(v)) {
-                    String skin = rvt.data.getString("villagers." + v.getUniqueId() + ".skin");
+                if (Utils.getTarget(p) instanceof LivingEntity v && vm.isVillagerEntity(v)) {
+                    String skin = vm.getVillager(v).getSkin();
                     sendMessage(sender, "&eThat villagers skin is: " + skin);
                 } else sendMessage(sender, "&cYou're not looking at a villager!");
             }
@@ -81,13 +95,12 @@ public class RVTCommand implements CommandExecutor {
                     sendMessage(sender, "&cLivingEntities automatically change!");
                     return;
                 }
-                if (Utils.getTarget(p) instanceof LivingEntity v && rvt.entEnabled(v)) {
-                    rvt.set("villagers." + v.getUniqueId() + ".name", "villager");
-                    rvt.getVillagerManager().makeVillager(v);
+                if (Utils.getTarget(p) instanceof LivingEntity v && vm.isVillagerEntity(v)) {
+                    vm.makeVillager(v);
                     sendMessage(sender, "&eLivingEntity changed to RVT version!");
                 } else sendMessage(sender, "&cYou're not looking at a villager!");
             }
-            case "likes" -> sendMessage(sender,"&e" + rvt.likeMap.get(p.getName()).size() + " villagers like you!");
+            case "likes" -> sendMessage(sender,"&e" + vm.getPlayer(p).getLikes().size() + " villagers like you!");
             default -> {
                 if (args.length < 2) {
                     helpMsg(sender);
@@ -95,10 +108,12 @@ public class RVTCommand implements CommandExecutor {
                 }
                 switch (arg) {
                     case "fixskin" -> {
-                        if (Utils.getTarget(p) instanceof LivingEntity v && rvt.entEnabled(v)) {
+                        if (Utils.getTarget(p) instanceof LivingEntity v && vm.isVillagerEntity(v)) {
                             String newSkin = args[1];
-                            String oldSkin = rvt.data.getString("villagers." + v.getUniqueId() + ".skin");
-                            rvt.replaceSkin(newSkin, oldSkin);
+                            RVTVillager villager = vm.getVillager(v);
+                            String oldSkin = villager.getSkin();
+                            villager.setSkin(newSkin);
+                            vm.disguise(villager);
                             sendMessage(sender, "&cSkin " + oldSkin + " replaced with " + newSkin);
                         } else sendMessage(sender, "&cYou're not looking at a villager!");
                     }
@@ -109,19 +124,18 @@ public class RVTCommand implements CommandExecutor {
                             return;
                         }
 
-                        if (Utils.getTarget(p) instanceof LivingEntity v && rvt.entEnabled(v)) {
-                            rvt.like(player, v);
+                        if (Utils.getTarget(p) instanceof LivingEntity v && vm.isVillagerEntity(v)) {
+                            rvt.like(vm.getPlayer(player), vm.getVillager(v));
                             sendMessage(sender,"&eThat villager now likes " + player.getName() + "!");
                         } else sendMessage(sender,"&cYou're not looking at a villager!");
                     }
                     case "clearbaby" -> {
-                        Player player;
-                        if ((player = rvt.getServer().getPlayer(args[1])) == null) {
+                        RVTPlayer player;
+                        if ((player = vm.getPlayer(rvt.getServer().getPlayer(args[1]))) == null) {
                             sendMessage(sender,"&cCan't find that player!");
                             return;
                         }
-                        rvt.set("players." + player.getUniqueId() + ".baby", null);
-                        rvt.set("players." + player.getUniqueId() + ".hasBaby", false);
+                        player.clearBaby();
                         sendMessage(sender,"&eCleared " + player.getName() + "'s baby.");
                     }
                     case "setprofession" -> {
