@@ -4,7 +4,6 @@ import io.github.tanguygab.realvillagertowns.villagers.RVTPlayer;
 import io.github.tanguygab.realvillagertowns.villagers.RVTVillager;
 import io.github.tanguygab.realvillagertowns.villagers.VillagerManager;
 import lombok.NonNull;
-import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
@@ -26,7 +25,7 @@ public class RVTCommand implements CommandExecutor {
     }
 
     private void sendMessage(CommandSender sender, String msg) {
-        sender.sendMessage(ChatColor.translateAlternateColorCodes('&',"&4RVT: "+msg));
+        sender.sendMessage(Utils.colors("&4RVT: "+msg));
     }
 
     private boolean hasPermission(CommandSender sender) {
@@ -90,7 +89,7 @@ public class RVTCommand implements CommandExecutor {
                 } else sendMessage(sender, "&cYou're not looking at a villager!");
             }
             case "setvillager" -> {
-                if (rvt.getConfig().getBoolean("autoChangeLivingEntitys")) {
+                if (rvt.getConfiguration().AUTO_CHANGE_VILLAGERS) {
                     sendMessage(sender, "&cLivingEntities automatically change!");
                     return;
                 }
@@ -179,13 +178,12 @@ public class RVTCommand implements CommandExecutor {
         while (iterator.hasNext()) {
             Block item = iterator.next();
             for (Entity entity : player.getNearbyEntities(100.0D, 100.0D, 100.0D)) {
-                if (entity instanceof LivingEntity && !entity.getType().equals(EntityType.BAT)) {
+                if (entity instanceof LivingEntity && entity.getType() != EntityType.BAT) {
                     int acc = 2;
                     for (int x = -acc; x < acc; x++) {
                         for (int z = -acc; z < acc; z++) {
                             for (int y = -acc; y < acc; y++) {
-                                if (entity.getLocation().getBlock()
-                                        .getRelative(x, y, z).equals(item))
+                                if (entity.getLocation().getBlock().getRelative(x, y, z) == item)
                                     return entity;
                             }
                         }

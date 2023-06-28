@@ -23,7 +23,7 @@ public class Interact {
     public void interact(RVTPlayer player, RVTVillager villager, Interaction interaction) {
         int hearts = player.getHappiness(villager);
         int min = 1;
-        int max = rvt.getConfig().getInt("villagerHappinessLevel");
+        int max = rvt.getConfiguration().VILLAGER_HAPPINESS_LEVEL;
         if (villager.getEntity() instanceof Villager v && v.getProfession() == Villager.Profession.NITWIT) max -= 5;
         if (villager.getDrunk() > 0) max -= Utils.random(1, 3);
 
@@ -49,7 +49,7 @@ public class Interact {
             }
         }
         Trait trait = villager.getTrait();
-        if (player.updateLastAction(interaction)) max += 6;
+        if (player.updateLastInteraction(interaction)) max += 6;
         switch (interaction) {
             case STORY,CHAT,JOKE,PLAY -> play(player,villager,interaction,trait,max,min,hearts);
             case GREET -> greet(player,villager,trait,max,min,hearts);

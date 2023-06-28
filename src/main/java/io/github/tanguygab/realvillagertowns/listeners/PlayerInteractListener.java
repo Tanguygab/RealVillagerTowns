@@ -31,7 +31,7 @@ public record PlayerInteractListener(RealVillagerTowns rvt, VillagerManager vm) 
         if (!(e.getRightClicked() instanceof LivingEntity clicked)) return;
         if (!player.isTrading()
                 && vm.isVillagerEntity(e.getRightClicked())
-                && vm.USE_VILLAGER_INTERACTIONS
+                && rvt.getConfiguration().USE_VILLAGER_INTERACTIONS
                 && !player.isInteracting()
                 && !clicked.hasMetadata("NPC")
                 && !clicked.hasMetadata("shopkeeper")) {
@@ -69,7 +69,7 @@ public record PlayerInteractListener(RealVillagerTowns rvt, VillagerManager vm) 
             new VillagerMenu(player, villager).onOpen();
             return;
         }
-        if (clicked instanceof Player pClicked && rvt.getConfig().getBoolean("enablePlayerMarriage")) {
+        if (clicked instanceof Player pClicked && rvt.getConfiguration().ENABLE_PLAYER_MARRIAGE) {
             e.setCancelled(true);
             clickedPlayer(player,pClicked);
             return;

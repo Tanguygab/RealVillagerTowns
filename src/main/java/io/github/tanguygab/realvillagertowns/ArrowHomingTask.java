@@ -29,12 +29,10 @@ public class ArrowHomingTask extends BukkitRunnable {
         Vector dirToTarget = toTarget.clone().normalize();
         double angle = dirVelocity.angle(dirToTarget);
         double newSpeed = 0.9D * speed + 0.14D;
-        if (angle < 0.12D) newVelocity = dirVelocity.clone().multiply(newSpeed);
-        else {
-            Vector newDir = dirVelocity.clone().multiply((angle - 0.12D) / angle).add(dirToTarget.clone().multiply(0.12D / angle));
-            newDir.normalize();
-            newVelocity = newDir.clone().multiply(newSpeed);
-        }
+        if (angle >= 0.12D) {
+            Vector newDir = dirVelocity.clone().multiply((angle - 0.12D) / angle).add(dirToTarget.clone().multiply(0.12D / angle)).normalize();
+            newVelocity = newDir.multiply(newSpeed);
+        } else newVelocity = dirVelocity.clone().multiply(newSpeed);
         arrow.setVelocity(newVelocity.add(new Vector(0.0D, 0.03D, 0.0D)));
     }
 }

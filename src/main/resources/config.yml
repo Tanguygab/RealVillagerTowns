@@ -1,99 +1,103 @@
 use-names: true
 use-villager-interactions: true
-spawnRandomVillagers: false
-randomVillagerChance: 256
-villagerHappinessLevel: 6
-minHeartsToMarry: 100
-aidCooldown: 300
-enablePlayerMarriage: true
-autoChangeVillagers: true
-likeTimer: 30
-maxLikes: 3
-babyChance: 6
-maxSameInteraction: 5
-aidItems:
-  "DIRT": 10
-  "COBBLESTONE": 10
-  "WHITE_WOOL": 5
-  "BOOKSHELF": 2
-  "TORCH": 10
-  "PUMPKIN": 2
-  "APPLE": 5
-  "COAL": 6
-  "DIAMOND": 1
-  "IRON_INGOT": 1
-  "GOLD_INGOT": 1
-  "STRING": 3
-  "FEATHER": 2
-  "GUNPOWDER": 1
-  "WHEAT_SEEDS": 10
-  "WHEAT": 6
-  "BREAD": 1
-  "FLINT": 5
-  "SUGAR_CANE": 3
-  "EGG": 8
-  "COD": 4
-  "BONE": 2
-  "CAKE": 1
-  "COOKIE": 5
-  "MELON_SLICE": 3
-  "CHICKEN": 3
-  "GOLD_NUGGET": 5
-  "EMERALD": 1
-  "CARROT": 5
-  "POTATO": 5
-shootRadius: 15
-mobs:
-  villagers:
-    - VILLAGER
-    - VINDICATOR
-    - EVOKER
-    - WITCH
-  hostile:
-    - ELDER_GUARDIAN
-    - WITHER_SKELETON
-    - STRAY
-    - HUSK
-    - ZOMBIE_VILLAGER
-    - SKELETON_HORSE
-    - ZOMBIE_HORSE
-    #- DONKEY
-    #- MULE
-    #- EVOKER
-    - VEX
-    #- VINDICATOR
-    - CREEPER
-    - SKELETON
-    - SPIDER
-    - GIANT
-    - ZOMBIE
-    - SLIME
-    - GHAST
-    - PIG_ZOMBIE
-    - ENDERMAN
-    - CAVE_SPIDER
-    - SILVERFISH
-    - BLAZE
-    - MAGMA_CUBE
-    - ENDER_DRAGON
-    - WITHER
-    - BAT
-    #- WITCH
-    - ENDERMITE
-    - GUARDIAN
-    - SHULKER
-    #- PIG
-    #- SHEEP
-    #- COW
-    #- CHICKEN
-    #- SQUID
-    #- WOLF
-    #- MUSHROOM_COW
-    #- SNOWMAN
-    #- OCELOT
-    #- IRON_GOLEM
-    #- HORSE
-    #- RABBIT
-    - POLAR_BEAR
-    - LLAMA
-    #- VILLAGER
+auto-change-villagers: true
+
+villagers-types:
+  - VILLAGER
+  - VINDICATOR
+  - EVOKER
+  - WITCH
+
+spawn-random-villagers: false
+random-villager-chance: 256
+
+villager-happiness-level: 6
+like-timer: 30
+baby-chance: 6
+max-likes: 3
+min-hearts-to-marry: 100
+enable-player-marriage: true
+max-same-interaction: 5
+
+aid-cooldown: 300
+aid-items:
+  DIRT: 10
+  COBBLESTONE: 10
+  WHITE_WOOL: 5
+  BOOKSHELF: 2
+  TORCH: 10
+  PUMPKIN: 2
+  APPLE: 5
+  COAL: 6
+  DIAMOND: 1
+  IRON_INGOT: 1
+  GOLD_INGOT: 1
+  STRING: 3
+  FEATHER: 2
+  GUNPOWDER: 1
+  WHEAT_SEEDS: 10
+  WHEAT: 6
+  BREAD: 1
+  FLINT: 5
+  SUGAR_CANE: 3
+  EGG: 8
+  COD: 4
+  BONE: 2
+  CAKE: 1
+  COOKIE: 5
+  MELON_SLICE: 3
+  CHICKEN: 3
+  GOLD_NUGGET: 5
+  EMERALD: 1
+  CARROT: 5
+  POTATO: 5
+
+shoot-radius: 15
+hostile-mobs:
+  - ELDER_GUARDIAN
+  - WITHER_SKELETON
+  - STRAY
+  - HUSK
+  - ZOMBIE_VILLAGER
+  - SKELETON_HORSE
+  - ZOMBIE_HORSE
+  #- DONKEY
+  #- MULE
+  #- EVOKER
+  - VEX
+  #- VINDICATOR
+  - CREEPER
+  - SKELETON
+  - SPIDER
+  - GIANT
+  - ZOMBIE
+  - SLIME
+  - GHAST
+  - PIG_ZOMBIE
+  - ENDERMAN
+  - CAVE_SPIDER
+  - SILVERFISH
+  - BLAZE
+  - MAGMA_CUBE
+  - ENDER_DRAGON
+  - WITHER
+  - BAT
+  #- WITCH
+  - ENDERMITE
+  - GUARDIAN
+  - SHULKER
+  #- PIG
+  #- SHEEP
+  #- COW
+  #- CHICKEN
+  #- SQUID
+  #- WOLF
+  #- MUSHROOM_COW
+  #- SNOWMAN
+  #- OCELOT
+  #- IRON_GOLEM
+  #- HORSE
+  #- RABBIT
+  - POLAR_BEAR
+  - LLAMA
+  #- VILLAGER

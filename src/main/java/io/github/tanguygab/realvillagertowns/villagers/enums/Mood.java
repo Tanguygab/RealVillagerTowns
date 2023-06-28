@@ -15,7 +15,7 @@ public enum Mood {
     private final List<String> lang;
 
     Mood() {
-        lang = RealVillagerTowns.getInstance().getConfig().getStringList("mood."+this);
+        lang = RealVillagerTowns.getInstance().getLang().getStringList("mood."+this);
     }
 
     public String getLang(int moodLevel) {

@@ -1,5 +1,7 @@
 package io.github.tanguygab.realvillagertowns;
 
+import io.github.tanguygab.realvillagertowns.configs.RVTConfig;
+import io.github.tanguygab.realvillagertowns.configs.RVTMessages;
 import io.github.tanguygab.realvillagertowns.listeners.PlayerInteractListener;
 import io.github.tanguygab.realvillagertowns.listeners.PlayerListener;
 import io.github.tanguygab.realvillagertowns.listeners.RVTListener;
@@ -17,11 +19,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.ShapedRecipe;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.*;
 import java.time.LocalDateTime;
-import java.time.temporal.ChronoUnit;
 import java.util.*;
 
 public final class RealVillagerTowns extends JavaPlugin {
@@ -30,29 +32,30 @@ public final class RealVillagerTowns extends JavaPlugin {
 
     private final File langFile = new File(getDataFolder(),"lang.yml");
     @Getter private FileConfiguration lang;
+    @Getter private RVTMessages messages;
+
     private final File dataFile = new File(getDataFolder(), "data.yml");
     public FileConfiguration data;
 
+    @Getter private RVTConfig configuration;
+
     @Getter private VillagerManager villagerManager;
     @Getter private Interact interact;
-
-    private final List<ItemStack> aidItemList = new ArrayList<>();
 
     @Override
     public void onEnable() {
         instance = this;
         loadFiles();
         CommandExecutor cmd = new RVTCommand(this);
-        getCommand("realvillagertowns").setExecutor(cmd);
-        getCommand("bringkids").setExecutor(cmd);
+        Objects.requireNonNull(getCommand("realvillagertowns")).setExecutor(cmd);
+        Objects.requireNonNull(getCommand("bringkids")).setExecutor(cmd);
 
         villagerManager = new VillagerManager(this);
 
-        getAidItems();
         addRecipes();
         getServer().getScheduler().scheduleSyncRepeatingTask(this,this::slowTimer,0,120);
-        getServer().getScheduler().scheduleSyncRepeatingTask(this, this::longTimer, 0,getConfig().getInt("likeTimer") * 20L);
-        getServer().getScheduler().scheduleSyncRepeatingTask(this, villagerManager::shootArrows,0,100);
+        getServer().getScheduler().scheduleSyncRepeatingTask(this,this::longTimer, 0,configuration.LIKE_TIMER * 20L);
+        getServer().getScheduler().scheduleSyncRepeatingTask(this,villagerManager::shootArrows,0,100);
         interact = new Interact(this);
 
         registerEvents(new RVTListener(this,villagerManager),
@@ -73,10 +76,11 @@ public final class RealVillagerTowns extends JavaPlugin {
     }
 
     public void loadFiles() {
-        new RVTConfig(this);
+        configuration = new RVTConfig(this);
 
         if (!langFile.exists()) saveResource("lang.yml", false);
         lang = YamlConfiguration.loadConfiguration(langFile);
+        messages = new RVTMessages(Objects.requireNonNull(lang.getConfigurationSection("messages")));
 
         if (!dataFile.exists()) {
             try {dataFile.createNewFile();}
@@ -91,13 +95,17 @@ public final class RealVillagerTowns extends JavaPlugin {
         catch (IOException e1) {e1.printStackTrace();}
     }
 
-    private ItemStack getRing() {
-        return Utils.getItem(Material.GOLD_NUGGET, "§6Marriage Ring", 1, List.of("§8Gift to villager to propose"));
-    }
     public void addRecipes() {
         NamespacedKey key = new NamespacedKey(this, "marriage_ring");
         if (getServer().getRecipe(key) != null) return;
-        ItemStack ring = getRing();
+
+        ItemStack ring = new ItemStack(Material.GOLD_NUGGET);
+        ItemMeta meta = ring.getItemMeta();
+        assert meta != null;
+        meta.setDisplayName("§6Marriage Ring");
+        meta.setLore(List.of("§8Gift to villager to propose"));
+        ring.setItemMeta(meta);
+
         ShapedRecipe sr = new ShapedRecipe(key, ring);
         sr.shape("AAA", "ABA", "AAA");
         sr.setIngredient('A', Material.GOLD_INGOT);
@@ -143,23 +151,12 @@ public final class RealVillagerTowns extends JavaPlugin {
         }
     }
 
-    public void getAidItems() {
-        for (String mat : getConfig().getConfigurationSection("aidItems").getKeys(false)) {
-            Material material = Material.getMaterial(mat);
-            if (material == null) {
-                getLogger().severe("Invalid aidItem material type \""+mat+"\"! Skipping...");
-                continue;
-            }
-            aidItemList.add(new ItemStack(material, getConfig().getInt("aidItems." + mat)));
-        }
-    }
-
     public void playerProcreate(RVTPlayer p, RVTPlayer proposer) {
         if (data.getBoolean("players." + p.getUniqueId() + ".hasBaby")) {
-            p.sendMessage(getConfig().getString("haveBabyMessage"));
+            p.sendMessage(messages.ALREADY_HAVE_BABY);
             return;
         }
-        String msg = getConfig().getString("babyMessage").replace("<player2>", proposer.getName());
+        String msg = messages.getBaby(proposer);
         p.sendMessage(msg);
         proposer.sendMessage(msg);
         makePlayerBaby(p, proposer);
@@ -188,16 +185,16 @@ public final class RealVillagerTowns extends JavaPlugin {
         partner.setMood(Mood.SAD,3);
         player.setHappiness(partner,-250);
 
-        player.sendMessage(getConfig().getString("divorceMessage").replace("<villager>", partner.getName()));
-        player.sendMessage(partner.getName()+ ": "+Utils.getListItem("speechSpouse.divorce").replace("<player>", player.getName()));
+        player.sendMessage(messages.getDivorce(partner));
+        player.villagerMessage(partner,getSpeech("divorce",player,partner));
     }
 
     public void adoptBaby(RVTPlayer player) {
         if (player.isHasBaby()) {
-            player.sendMessage(getConfig().getString("haveBabyMessage"));
+            player.sendMessage(messages.ALREADY_HAVE_BABY);
             return;
         }
-        player.sendMessage(getConfig().getString("adoptMessage"));
+        player.sendMessage(messages.ADOPT);
         makeBaby(player,null);
     }
     public void makeBaby(RVTPlayer player, RVTVillager villager) {
@@ -220,7 +217,7 @@ public final class RealVillagerTowns extends JavaPlugin {
     public void like(RVTPlayer player, RVTVillager villager) {
         UUID uuid = player.getUniqueId();
         int likes = player.getLikes().size();
-        if (likes < getConfig().getInt("maxLikes") + 1 && villager.getPartner() != uuid && villager.getParent1() != uuid) {
+        if (configuration.belowMaxLike(likes) && villager.getPartner() != uuid && villager.getParent1() != uuid) {
             giveItem(villager, new ItemStack(Material.POPPY));
             villager.setLikes(uuid);
             player.getLikes().add(villager.getUniqueId());
@@ -238,7 +235,7 @@ public final class RealVillagerTowns extends JavaPlugin {
             return;
         }
 
-        if (hearts >= getConfig().getInt("minHeartsToMarry")) {
+        if (configuration.enoughHeartsToMarry(hearts)) {
             player.speech("marry-yes", villager);
             player.setHappiness(villager, Utils.random(10, 30));
             villager.setMood(Mood.HAPPY,5);
@@ -257,10 +254,11 @@ public final class RealVillagerTowns extends JavaPlugin {
         String parent2 = villager.getGender().getParent();
         String gen = villager.getGender().getChild();
 
-        return villager.getName() + ": " + Utils.colors(Utils.getListItem("speech"+family+"."+type).replace("<player>", player.getName())
+        return villager.getName() + ": " + Utils.getListItem("speech"+family+"."+type)
+                .replace("<player>", player.getName())
                 .replace("<parent>", parent1)
                 .replace("<parent2>", parent2)
-                .replace("<sex>", gen));
+                .replace("<sex>", gen);
     }
     public String getSpeech(String type, RVTPlayer player, RVTVillager villager) {
         String family = player.getChildren().contains(villager.getUniqueId()) && villager.isBaby() ? "Child"
@@ -274,15 +272,14 @@ public final class RealVillagerTowns extends JavaPlugin {
 
 
     public void getAid(RVTPlayer p, RVTVillager villager) {
-        if (p.getAidCooldown() != null && ChronoUnit.SECONDS.between(p.getAidCooldown(),LocalDateTime.now()) < getConfig().getInt("aidCooldown")) {
+        if (configuration.isOnCooldown(p.getAidCooldown())) {
             p.speech("aid-no", villager);
             p.setHappiness(villager, -1);
             villager.swingMood(Math.max(Utils.random(-8, 1), 0));
             return;
         }
         p.speech("aid-yes", villager);
-        int index = Utils.random(aidItemList.size());
-        p.getPlayer().getInventory().addItem(aidItemList.get(index));
+        p.getPlayer().getInventory().addItem(configuration.getAidItem());
         p.setAidCooldown(LocalDateTime.now());
     }
 
@@ -301,7 +298,7 @@ public final class RealVillagerTowns extends JavaPlugin {
                 int i = type == GiftType.HIGH_DRUNK ? 2 : 1;
                 if (Utils.random(1, 3) == 1) {
                     villager.setDrunk(villager.getDrunk()+i);
-                    player.getPlayer().sendMessage(villager.getName()+": "+Utils.colors(getConfig().getString("drunkMessage")));
+                    player.villagerMessage(villager,messages.DRUNK);
                 }
             }
             default -> {

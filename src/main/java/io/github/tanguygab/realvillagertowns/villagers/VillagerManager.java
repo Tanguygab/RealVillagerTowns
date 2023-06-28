@@ -23,35 +23,14 @@ public class VillagerManager {
 
     private final RealVillagerTowns rvt;
     private final FileConfiguration data;
-    private final List<EntityType> villagersEntityTypes = new ArrayList<>();
     @Getter private final Map<UUID,RVTVillager> villagers = new HashMap<>();
     @Getter private final Map<UUID,RVTPlayer> players = new HashMap<>();
 
-    private final boolean AUTO_CHANGE_VILLAGERS;
-    private final boolean USE_NAMES;
-    public final boolean USE_VILLAGER_INTERACTIONS;
 
-    private final int SHOOT_RADIUS;
-    private final List<String> HOSTILE_MOBS;
     public VillagerManager(RealVillagerTowns rvt) {
         this.rvt = rvt;
         data = rvt.data;
-        FileConfiguration config = rvt.getConfig();
 
-        AUTO_CHANGE_VILLAGERS = config.getBoolean("autoChangeVillagers",true);
-        USE_NAMES = config.getBoolean("useNames",true);
-        USE_VILLAGER_INTERACTIONS = config.getBoolean("useVillagerInteractions");
-        SHOOT_RADIUS = rvt.getConfig().getInt("shootRadius");
-        HOSTILE_MOBS = rvt.getConfig().getStringList("hostileMobs");
-
-        config.getStringList("villagerMobs").forEach(str->{
-            try {
-                EntityType type = EntityType.valueOf(str);
-                villagersEntityTypes.add(type);
-            } catch (Exception e) {
-                rvt.getLogger().severe("Invalid Villager entity type \""+str+"\"! Skipping...");
-            }
-        });
         rvt.getServer().getWorlds().forEach(world->world.getLivingEntities().forEach(entity->{
             if (isVillagerEntity(entity)) makeVillager(entity);
         }));
@@ -64,14 +43,14 @@ public class VillagerManager {
     }
 
     public boolean isVillagerEntity(Entity entity) {
-        return entity instanceof LivingEntity && villagersEntityTypes.contains(entity.getType());
+        return entity instanceof LivingEntity && rvt.getConfiguration().isVillagerType(entity);
     }
 
     public boolean isVillager(Entity entity) {
         return isVillagerEntity(entity) && villagers.containsKey(entity.getUniqueId());
     }
     public void makeVillager(LivingEntity entity) {
-        if (!data.contains("villagers."+entity.getUniqueId()) && !AUTO_CHANGE_VILLAGERS) return;
+        if (!data.contains("villagers."+entity.getUniqueId()) && !rvt.getConfiguration().AUTO_CHANGE_VILLAGERS) return;
         RVTVillager villager = data.contains("villagers."+entity.getUniqueId()) ? loadVillager(entity) : createVillager(entity);
         disguise(villager);
         villagers.put(villager.getUniqueId(),villager);
@@ -94,7 +73,7 @@ public class VillagerManager {
         String skin = Utils.getListItem("skins."+gender+"."+type);
         String title = " the " + type;
 
-        String name = USE_NAMES ? Utils.getListItem("names."+gender) : skin;
+        String name = rvt.getConfiguration().USE_NAMES ? Utils.getListItem("names."+gender) : skin;
         Trait trait = Trait.valueOf(Utils.getListItem("traits"));
 
         return new RVTVillager(entity,uuid,name,gender,skin,title,trait);
@@ -276,7 +255,7 @@ public class VillagerManager {
 
     public void procreate(RVTPlayer player, RVTVillager villager) {
         if (player.getGender() == villager.getGender() || player.isHasBaby()) return;
-        boolean baby = Utils.random(1, rvt.getConfig().getInt("babyChance")) != 1;
+        boolean baby = rvt.getConfiguration().getBabyChance();
 
         int hearts = player.getHappiness(villager);
 
@@ -287,7 +266,7 @@ public class VillagerManager {
             if (baby) rvt.getServer().getScheduler().scheduleSyncDelayedTask(rvt, () -> rvt.makeBaby(player, villager), 42L);
             return;
         }
-        if (player.updateLastAction(Interaction.PROCREATE)) {
+        if (player.updateLastInteraction(Interaction.PROCREATE)) {
             player.speech("drunk", villager);
             loveJump(villager);
             player.setHappiness(villager, Utils.random(-25, 0));
@@ -305,8 +284,9 @@ public class VillagerManager {
         villagers.values().forEach(villager->{
             if (villager.getInHand() != Material.BOW && villager.getInHand() != Material.CROSSBOW) return;
 
+            int SHOOT_RADIUS = rvt.getConfiguration().SHOOT_RADIUS;
             for (Entity e : villager.getEntity().getNearbyEntities(SHOOT_RADIUS, SHOOT_RADIUS, SHOOT_RADIUS)) {
-                if (HOSTILE_MOBS.contains(e.getType().toString())) {
+                if (rvt.getConfiguration().isHostileMob(e)) {
                     shootArrow(villager.getEntity(), e);
                     break;
                 }

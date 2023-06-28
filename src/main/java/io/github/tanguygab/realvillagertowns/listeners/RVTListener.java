@@ -1,7 +1,6 @@
 package io.github.tanguygab.realvillagertowns.listeners;
 
 import io.github.tanguygab.realvillagertowns.RealVillagerTowns;
-import io.github.tanguygab.realvillagertowns.Utils;
 import io.github.tanguygab.realvillagertowns.menus.RVTMenu;
 import io.github.tanguygab.realvillagertowns.villagers.RVTPlayer;
 import io.github.tanguygab.realvillagertowns.villagers.VillagerManager;
@@ -31,15 +30,13 @@ public record RVTListener(RealVillagerTowns rvt, VillagerManager vm) implements 
                 vm.getVillager(liv).stopFollow();
             }
         }
-        if (!rvt.getConfig().getBoolean("spawnRandomVillagers")) return;
-        int r = Utils.random(rvt.getConfig().getInt("randomVillagerChance") - 1 + 1) + 1;
-        if (r != 1) return;
+        if (!rvt.getConfiguration().canSpawnRandomVillager()) return;
         World w = e.getWorld();
         Chunk c = e.getChunk();
         Location tmp = new Location(w, (c.getX() * 16), 0.0D, (c.getZ() * 16));
         Location loc = new Location(w, (c.getX() * 16), w.getHighestBlockYAt(tmp), (c.getZ() * 16));
         loc.setY(loc.getY() + 1.0D);
-        if (!List.of(Material.WATER, Material.LAVA).contains(loc.getWorld().getHighestBlockAt(loc).getType()))
+        if (loc.getWorld() != null && !List.of(Material.WATER, Material.LAVA).contains(loc.getWorld().getHighestBlockAt(loc).getType()))
             e.getChunk().getWorld().spawnEntity(loc, EntityType.VILLAGER);
 
     }

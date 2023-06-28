@@ -80,18 +80,21 @@ public class RVTPlayer {
         lastInteraction = interaction;
         lastInteractionTimes = times;
     }
-    public boolean updateLastAction(Interaction interaction) {
+    public boolean updateLastInteraction(Interaction interaction) {
         if (lastInteraction != interaction) {
             setLastInteraction(interaction,1);
             return false;
         }
         int times = lastInteractionTimes + 1;
         setLastInteraction(interaction,times);
-        return times >= RealVillagerTowns.getInstance().getConfig().getInt("maxSameInteraction");
+        return RealVillagerTowns.getInstance().getConfiguration().canUpdateLastInteraction(times);
     }
 
     public void sendMessage(String message) {
         player.sendMessage(Utils.colors(message));
+    }
+    public void villagerMessage(RVTVillager villager, String message) {
+        sendMessage(villager.getName()+": "+message);
     }
     public void speech(String msg, RVTVillager villager) {
         sendMessage(RealVillagerTowns.getInstance().getSpeech(msg,this,villager));
