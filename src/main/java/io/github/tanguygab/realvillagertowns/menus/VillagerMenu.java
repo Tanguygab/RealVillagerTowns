@@ -2,23 +2,25 @@ package io.github.tanguygab.realvillagertowns.menus;
 
 import io.github.tanguygab.realvillagertowns.villagers.RVTPlayer;
 import io.github.tanguygab.realvillagertowns.villagers.RVTVillager;
+import io.github.tanguygab.realvillagertowns.villagers.enums.Button;
+import io.github.tanguygab.realvillagertowns.villagers.enums.Gender;
+import io.github.tanguygab.realvillagertowns.villagers.enums.RVTEntityType;
+import io.github.tanguygab.realvillagertowns.villagers.enums.Trait;
 import org.bukkit.Material;
 import org.bukkit.entity.Villager;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
-import java.util.List;
+import java.util.UUID;
 
 public class VillagerMenu extends RVTMenu {
 
     private final RVTVillager villager;
-    private final List<String> buttons;
 
     public VillagerMenu(RVTPlayer player, RVTVillager villager) {
         super(player, "", 1);
         this.villager = villager;
-        buttons = rvt.getConfig().getStringList("buttons");
 
         String name = villager.getName();
         String title = villager.getTitle();
@@ -31,54 +33,75 @@ public class VillagerMenu extends RVTMenu {
 
     @Override
     public void onOpen() {
-        addItem("interact");
+        addItem(Button.INTERACT);
 
-        ItemStack i = rvt.getInfo(player, villager);
-        inv.setItem(8, i);
+        inv.setItem(8, getInfo(player, villager));
 
         if (!(villager.getEntity() instanceof Villager v)) {
             open();
             return;
         }
-        if (v.getProfession() != Villager.Profession.NITWIT) addItem("trade");
-        addItem("setHome");
-        if (!player.isMarried(villager) && !player.isChild(villager)) addItem("requestAid");
+        if (v.getProfession() != Villager.Profession.NITWIT) addItem(Button.TRADE);
+        addItem(Button.SET_HOME);
+        if (!player.isMarried(villager) && !player.isChild(villager)) addItem(Button.REQUEST_AID);
         if (!player.isBaby(villager) && v.getProfession() == Villager.Profession.CLERIC) {
-            addItem("divorce");
-            addItem("adopt");
+            addItem(Button.DIVORCE);
+            addItem(Button.ADOPT);
         }
         open();
     }
 
-    private void addItem(String action) {
-        if (buttons.contains(action))
-            inv.addItem(createMenuItem(Material.SLIME_BALL,getLang(action)));
+    private void addItem(Button button) {
+        inv.addItem(createMenuItem(Material.SLIME_BALL,button.getLang()));
     }
 
     @Override
     public boolean onClick(ItemStack item, int slot, ClickType click) {
         ItemMeta meta = item.getItemMeta();
         if (meta == null || !meta.hasDisplayName()) return true;
-        String currentItem = meta.getDisplayName();
+        Button button = Button.fromLang(meta.getDisplayName());
+        if (button == null) return true;
 
-        if (is(currentItem,"interact")) new InteractionMenu(player,villager).onOpen();
-        else if (is(currentItem,"trade")) {
-            player.setTrading(true);
-            player.sendMessage("Click player again to trade.");
+        switch (button) {
+            case INTERACT -> new InteractionMenu(player,villager).onOpen();
+            case TRADE -> {
+                player.setTrading(true);
+                player.sendMessage("Click player again to trade.");
+            }
+            case REQUEST_AID -> rvt.getAid(player,villager);
+            case SET_HOME -> {
+                villager.setHome();
+                player.sendMessage(villager.getName() + "'s home set!");
+            }
+            case ADOPT -> rvt.adoptBaby(player);
+            case DIVORCE -> rvt.divorce(player);
+            default -> {return true;}
         }
-        else if (is(currentItem,"requestAid")) rvt.getAid(player,villager);
-        else if (is(currentItem,"setHome")) {
-            villager.setHome();
-            player.sendMessage(villager.getName() + "'s home set!");
-        }
-        else if (is(currentItem,"adopt")) rvt.adoptBaby(player);
-        else if (is(currentItem,"divorce")) rvt.divorce(player);
-        else return true;
         onClose();
         return true;
     }
 
-    private boolean is(String currentItem, String action) {
-        return currentItem.equals(getLang(action));
+    public ItemStack getInfo(RVTPlayer p, RVTVillager villager) {
+        String name = villager.getName();
+        int hearts = p.getHappiness(villager);
+        Trait trait = villager.getTrait();
+        Gender sex = villager.getGender();
+        String mood = villager.getDrunk() > 0 ? "Drunk" : villager.getMood().getLang(villager.getMoodLevel());
+
+        UUID parentId = villager.getParent1();
+        String parent = villager.getParentType() == RVTEntityType.PLAYER
+                ? vm.getPlayer(parentId).getName()
+                : vm.getVillager(parentId).getName();
+
+        UUID partnerId = villager.getPartner();
+        String partner = villager.getPartnerType() == RVTEntityType.PLAYER
+                ? vm.getPlayer(partnerId).getName()
+                : vm.getVillager(partnerId).getName();
+
+        String lore = "§7Name: §8"+name+"\n§7Hearts: §8"+hearts+"\n§7Sex: §8"+sex+"\n§7Trait: §8"+trait.getLang()+"\n§7Mood: §8"+mood;
+        if (parent != null) lore+="\n§7Child of: §8" + parent;
+        if (partner != null) lore+="\n§7Married to: §8" + partner;
+        return createMenuItem(Material.LIME_DYE, "§2Info", lore.split("\n"));
     }
+
 }

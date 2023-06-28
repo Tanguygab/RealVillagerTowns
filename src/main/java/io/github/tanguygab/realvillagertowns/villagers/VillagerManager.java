@@ -1,7 +1,10 @@
 package io.github.tanguygab.realvillagertowns.villagers;
 
+import io.github.tanguygab.realvillagertowns.ArrowHomingTask;
 import io.github.tanguygab.realvillagertowns.RealVillagerTowns;
 import io.github.tanguygab.realvillagertowns.Utils;
+import io.github.tanguygab.realvillagertowns.villagers.enums.*;
+import io.github.tanguygab.realvillagertowns.villagers.enums.Interaction;
 import lombok.Getter;
 import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.disguisetypes.PlayerDisguise;
@@ -12,6 +15,7 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.util.Vector;
 
 import java.util.*;
 
@@ -27,6 +31,8 @@ public class VillagerManager {
     private final boolean USE_NAMES;
     public final boolean USE_VILLAGER_INTERACTIONS;
 
+    private final int SHOOT_RADIUS;
+    private final List<String> HOSTILE_MOBS;
     public VillagerManager(RealVillagerTowns rvt) {
         this.rvt = rvt;
         data = rvt.data;
@@ -35,6 +41,8 @@ public class VillagerManager {
         AUTO_CHANGE_VILLAGERS = config.getBoolean("autoChangeVillagers",true);
         USE_NAMES = config.getBoolean("useNames",true);
         USE_VILLAGER_INTERACTIONS = config.getBoolean("useVillagerInteractions");
+        SHOOT_RADIUS = rvt.getConfig().getInt("shootRadius");
+        HOSTILE_MOBS = rvt.getConfig().getStringList("hostileMobs");
 
         config.getStringList("villagerMobs").forEach(str->{
             try {
@@ -87,7 +95,7 @@ public class VillagerManager {
         String title = " the " + type;
 
         String name = USE_NAMES ? Utils.getListItem("names."+gender) : skin;
-        String trait = Utils.getListItem("traits");
+        Trait trait = Trait.valueOf(Utils.getListItem("traits"));
 
         return new RVTVillager(entity,uuid,name,gender,skin,title,trait);
     }
@@ -101,7 +109,7 @@ public class VillagerManager {
                 Gender.valueOf(cfg.getString("gender")),
                 cfg.getString("skin"),
                 cfg.getString("title"),
-                cfg.getString("trait"));
+                Trait.valueOf(cfg.getString("trait")));
 
         if (cfg.contains("parent")) {
             RVTEntityType parentType = RVTEntityType.valueOf(cfg.getString("parent.type"));
@@ -139,7 +147,7 @@ public class VillagerManager {
         cfg.set("gender", villager.getGender().toString());
         cfg.set("skin", villager.getSkin());
         cfg.set("title", villager.getTitle());
-        cfg.set( "trait", villager.getTrait());
+        cfg.set( "trait", villager.getTrait().toString());
 
         cfg.set("parent.type",villager.getParentType());
         cfg.set("parent.parent1",villager.getParent1() == null ? null : villager.getParent1());
@@ -225,10 +233,7 @@ public class VillagerManager {
 
         PlayerDisguise disguise = new PlayerDisguise(villager.getName(),villager.getSkin());
         Material hand = villager.getInHand();
-        if (hand != null) {
-            disguise.getWatcher().setItemInMainHand(new ItemStack(hand));
-            if (hand == Material.BOW) rvt.shootArrows(villager.getEntity());
-        }
+        if (hand != null) disguise.getWatcher().setItemInMainHand(new ItemStack(hand));
         DisguiseAPI.disguiseToAll(villager.getEntity(), disguise);
     }
 
@@ -282,7 +287,7 @@ public class VillagerManager {
             if (baby) rvt.getServer().getScheduler().scheduleSyncDelayedTask(rvt, () -> rvt.makeBaby(player, villager), 42L);
             return;
         }
-        if (player.updateLastAction("procreate")) {
+        if (player.updateLastAction(Interaction.PROCREATE)) {
             player.speech("drunk", villager);
             loveJump(villager);
             player.setHappiness(villager, Utils.random(-25, 0));
@@ -294,6 +299,42 @@ public class VillagerManager {
     public void loveJump(RVTVillager villager) {
         for (int i = 0; i <= 3; i++)
             rvt.getServer().getScheduler().scheduleSyncDelayedTask(rvt, villager::jump, i * 16L);
+    }
+
+    public void shootArrows() {
+        villagers.values().forEach(villager->{
+            if (villager.getInHand() != Material.BOW && villager.getInHand() != Material.CROSSBOW) return;
+
+            for (Entity e : villager.getEntity().getNearbyEntities(SHOOT_RADIUS, SHOOT_RADIUS, SHOOT_RADIUS)) {
+                if (HOSTILE_MOBS.contains(e.getType().toString())) {
+                    shootArrow(villager.getEntity(), e);
+                    break;
+                }
+            }
+        });
+    }
+    private void shootArrow(LivingEntity villager, Entity victim) {
+        Location loc1 = victim.getLocation();
+        Location loc2 = villager.getLocation();
+        loc2.setY(loc2.getY() + 1.0D);
+        loc2.setX(loc2.getBlockX() + 0.5D);
+        loc2.setZ(loc2.getBlockZ() + 0.5D);
+        int arrowSpeed = 1;
+        Arrow a = villager.getWorld().spawnArrow(loc2, new org.bukkit.util.Vector(loc1.getX() - loc2.getX(), loc1.getY() - loc2.getY(), loc1.getZ() - loc2.getZ()), arrowSpeed, 12.0F);
+        a.setShooter(villager);
+        double minAngle = 6.283185307179586D;
+        LivingEntity minEntity = null;
+        for (Entity entity : villager.getNearbyEntities(64.0D, 64.0D, 64.0D)) {
+            if (villager.hasLineOfSight(entity) && entity instanceof LivingEntity v && !entity.isDead()) {
+                Vector toTarget = entity.getLocation().toVector().clone().subtract(villager.getLocation().toVector());
+                double angle = a.getVelocity().angle(toTarget);
+                if (angle < minAngle) {
+                    minAngle = angle;
+                    minEntity = v;
+                }
+            }
+        }
+        if (minEntity != null) new ArrowHomingTask(a,minEntity,rvt);
     }
 
 

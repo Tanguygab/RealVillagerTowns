@@ -2,6 +2,10 @@ package io.github.tanguygab.realvillagertowns.villagers;
 
 import io.github.tanguygab.realvillagertowns.RealVillagerTowns;
 import io.github.tanguygab.realvillagertowns.Utils;
+import io.github.tanguygab.realvillagertowns.villagers.enums.Gender;
+import io.github.tanguygab.realvillagertowns.villagers.enums.Mood;
+import io.github.tanguygab.realvillagertowns.villagers.enums.RVTEntityType;
+import io.github.tanguygab.realvillagertowns.villagers.enums.Trait;
 import lombok.*;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -27,7 +31,7 @@ public class RVTVillager {
     @NonNull private Gender gender;
     @NonNull @Setter private String skin;
     @NonNull private String title;
-    @NonNull private String trait;
+    @NonNull private Trait trait;
 
     private RVTEntityType parentType;
     private UUID parent1;

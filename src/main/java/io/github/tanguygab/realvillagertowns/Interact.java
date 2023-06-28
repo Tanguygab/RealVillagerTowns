@@ -1,9 +1,10 @@
 package io.github.tanguygab.realvillagertowns;
 
-import io.github.tanguygab.realvillagertowns.villagers.Mood;
+import io.github.tanguygab.realvillagertowns.villagers.enums.Interaction;
+import io.github.tanguygab.realvillagertowns.villagers.enums.Mood;
 import io.github.tanguygab.realvillagertowns.villagers.RVTPlayer;
 import io.github.tanguygab.realvillagertowns.villagers.RVTVillager;
-import io.github.tanguygab.realvillagertowns.villagers.VillagerManager;
+import io.github.tanguygab.realvillagertowns.villagers.enums.Trait;
 import lombok.NonNull;
 import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
@@ -14,18 +15,16 @@ import org.bukkit.util.Vector;
 public class Interact {
 
     private final RealVillagerTowns rvt;
-    private final VillagerManager vm;
 
     public Interact(RealVillagerTowns rvt) {
         this.rvt = rvt;
-        vm = rvt.getVillagerManager();
     }
 
-    public void interact(RVTPlayer player, RVTVillager villager, String action) {
+    public void interact(RVTPlayer player, RVTVillager villager, Interaction interaction) {
         int hearts = player.getHappiness(villager);
         int min = 1;
         int max = rvt.getConfig().getInt("villagerHappinessLevel");
-        if (villager.getEntity() instanceof Villager vl && vl.getProfession() == Villager.Profession.NITWIT) max -= 5;
+        if (villager.getEntity() instanceof Villager v && v.getProfession() == Villager.Profession.NITWIT) max -= 5;
         if (villager.getDrunk() > 0) max -= Utils.random(1, 3);
 
         Mood mood = villager.getMood();
@@ -49,28 +48,29 @@ public class Interact {
                 max -= moodLevel;
             }
         }
-        boolean likes = villager.getLikes() == player.getUniqueId();
-        String trait = villager.getTrait();
-        if (player.updateLastAction(action)) max += 6;
-        switch (action) {
-            case "story","chat","joke","play" -> play(player,villager,action,trait,max,min,hearts);
-            case "greet" -> greet(player,villager,trait,max,min,hearts);
-            case "flirt" -> flirt(player,villager,likes,trait,max,min,hearts);
-            case "kiss" -> kiss(player,villager,likes,trait,max,min,hearts);
-            case "insult" -> insult(player,villager);
-            case "follow" -> follow(player,villager);
-            case "stopFollow" -> stopFollow(villager.getEntity());
-            case "stay" -> villager.setStaying(true);
-            case "move" -> villager.setStaying(false);
+        Trait trait = villager.getTrait();
+        if (player.updateLastAction(interaction)) max += 6;
+        switch (interaction) {
+            case STORY,CHAT,JOKE,PLAY -> play(player,villager,interaction,trait,max,min,hearts);
+            case GREET -> greet(player,villager,trait,max,min,hearts);
+            case FLIRT -> flirt(player,villager,trait,max,min,hearts);
+            case KISS -> kiss(player,villager,trait,max,min,hearts);
+            case INSULT -> insult(player,villager);
+            case FOLLOW -> follow(player,villager);
+            case STOP_FOLLOW -> stopFollow(villager);
+            case STAY -> villager.setStaying(true);
+            case MOVE -> villager.setStaying(false);
         }
     }
 
-    private void play(RVTPlayer player, RVTVillager villager, String type, String trait, int max, int min, int hearts) {
-        if (trait.equals("Shy")) max++;
-        if (trait.equals("Fun") && (type.equals("joke") || type.equals("play"))) max -= 2;
-        else if (trait.equals("Fun")) max--;
+    private void play(RVTPlayer player, RVTVillager villager, Interaction interaction, Trait trait, int max, int min, int hearts) {
+        if (trait == Trait.SHY) max++;
+        if (trait == Trait.FUN) {
+            if (interaction == Interaction.JOKE || interaction == Interaction.PLAY) max -= 2;
+            else max--;
+        }
 
-        if (trait.equals("Outgoing")) max++;
+        if (trait == Trait.OUTGOING) max++;
         if (hearts > 20) max--;
         if (hearts > 50) max--;
         if (hearts > 80) max--;
@@ -78,19 +78,19 @@ public class Interact {
         if (max < 1) max = 1;
         int r = Utils.random(max - min + 1) + min;
         if (r == 1) {
-            player.speech(type + "-good", villager);
+            player.speech(interaction + "-good", villager);
             player.setHappiness(villager, Utils.random(1, 10));
             return;
         }
-        player.speech(type + "-bad", villager);
+        player.speech(interaction + "-bad", villager);
         player.setHappiness(villager, Utils.random(-10, -1));
     }
-    private void greet(RVTPlayer player, RVTVillager villager, String trait, int max, int min, int hearts) {
-        if (trait.equals("Shy")) max++;
-        if (trait.equals("Friendly")) max -= 2;
-        if (trait.equals("Fun")) max++;
-        if (trait.equals("Outgoing")) max++;
-        if (trait.equals("Serious")) max++;
+    private void greet(RVTPlayer player, RVTVillager villager, Trait trait, int max, int min, int hearts) {
+        if (trait == Trait.SHY) max++;
+        if (trait == Trait.FRIENDLY) max -= 2;
+        if (trait == Trait.FUN) max++;
+        if (trait == Trait.OUTGOING) max++;
+        if (trait == Trait.SERIOUS) max++;
         if (hearts > 10) max--;
         if (hearts > 30) max--;
         if (hearts > 50) max--;
@@ -106,13 +106,13 @@ public class Interact {
         player.speech("greet-bad", villager);
         player.setHappiness(villager, Utils.random(-6, -1));
     }
-    private void flirt(RVTPlayer player, RVTVillager villager, boolean likes, String trait, int max, int min, int hearts) {
-        if (likes) max -= 4;
-        if (trait.equals("Shy") && !player.isMarried(villager)) max += 2;
-        if (trait.equals("Irritable")) max++;
-        if (trait.equals("Emotional")) max += Utils.random(-1, 1);
-        if (trait.equals("Outgoing")) max--;
-        if (trait.equals("Serious")) max++;
+    private void flirt(RVTPlayer player, RVTVillager villager, Trait trait, int max, int min, int hearts) {
+        if (villager.getLikes() == player.getUniqueId()) max -= 4;
+        if (trait == Trait.SHY && !player.isMarried(villager)) max += 2;
+        if (trait == Trait.IRRITABLE) max++;
+        if (trait == Trait.EMOTIONAL) max += Utils.random(-1, 1);
+        if (trait == Trait.OUTGOING) max--;
+        if (trait == Trait.SERIOUS) max++;
         if (hearts < -10) max++;
         if (hearts < -30) max++;
         if (hearts < -50) max++;
@@ -139,13 +139,13 @@ public class Interact {
         swing *= -1;
         villager.swingMood(Math.max(swing,0));
     }
-    private void kiss(RVTPlayer player, RVTVillager villager, boolean likes, String trait, int max, int min, int hearts) {
-        if (likes) max -= 2;
-        if (trait.equals("Shy") && !player.isMarried(villager)) max += 3;
-        if (trait.equals("Irritable")) max += 2;
-        if (trait.equals("Emotional")) max += Utils.random(-3, 3);
-        if (trait.equals("Outgoing")) max += Utils.random(-1, 3);
-        if (trait.equals("Serious") && hearts < 50) max++;
+    private void kiss(RVTPlayer player, RVTVillager villager, Trait trait, int max, int min, int hearts) {
+        if (villager.getLikes() == player.getUniqueId()) max -= 2;
+        if (trait == Trait.SHY && !player.isMarried(villager)) max += 3;
+        if (trait == Trait.IRRITABLE) max += 2;
+        if (trait == Trait.EMOTIONAL) max += Utils.random(-3, 3);
+        if (trait == Trait.OUTGOING) max += Utils.random(-1, 3);
+        if (trait == Trait.SERIOUS && hearts < 50) max++;
         if (hearts < 30) max++;
         if (hearts < 20) max += 2;
         if (hearts < 10) max += 3;
@@ -176,6 +176,8 @@ public class Interact {
         player.speech("insult", villager);
         player.setHappiness(villager, Utils.random(-15, -5));
     }
+
+    @SuppressWarnings("deprecation")
     private void follow(@NonNull RVTPlayer player, RVTVillager villager) {
         player.speech("follow", villager);
         villager.setFollowed(player);
@@ -188,11 +190,11 @@ public class Interact {
         DisguiseAPI.disguiseToAll(wolf, mobDisguise);
         wolf.setVelocity(new Vector(0.0D, 0.1D, 0.0D));
     }
-    private void stopFollow(LivingEntity v) {
-        for (Entity near : v.getNearbyEntities(5.0D, 5.0D, 5.0D))
-            if (!near.getPassengers().isEmpty() && near.getPassengers().get(0) == v) {
+    private void stopFollow(RVTVillager villager) {
+        for (Entity near : villager.getEntity().getNearbyEntities(5.0D, 5.0D, 5.0D))
+            if (!near.getPassengers().isEmpty() && near.getPassengers().get(0) == villager.getEntity()) {
                 near.remove();
-                vm.getVillager(v).stopFollow();
+                villager.stopFollow();
                 return;
             }
     }

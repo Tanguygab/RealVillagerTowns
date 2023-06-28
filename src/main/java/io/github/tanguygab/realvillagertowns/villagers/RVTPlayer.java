@@ -2,6 +2,9 @@ package io.github.tanguygab.realvillagertowns.villagers;
 
 import io.github.tanguygab.realvillagertowns.RealVillagerTowns;
 import io.github.tanguygab.realvillagertowns.Utils;
+import io.github.tanguygab.realvillagertowns.villagers.enums.Gender;
+import io.github.tanguygab.realvillagertowns.villagers.enums.Interaction;
+import io.github.tanguygab.realvillagertowns.villagers.enums.RVTEntityType;
 import lombok.*;
 import org.bukkit.entity.Player;
 
@@ -32,8 +35,8 @@ public class RVTPlayer {
     @Setter private boolean trading = false;
     @Setter private boolean interacting = false;
 
-    private String lastAction;
-    private int lastActionTimes = 0;
+    private Interaction lastInteraction;
+    private int lastInteractionTimes = 0;
 
     public boolean isMarried(RVTVillager entity) {
         return partner == entity.getUniqueId();
@@ -73,17 +76,17 @@ public class RVTPlayer {
         return happiness.getOrDefault(villager.getUniqueId(),0);
     }
 
-    public void setLastAction(String action, int times) {
-        lastAction = action;
-        lastActionTimes = times;
+    public void setLastInteraction(Interaction interaction, int times) {
+        lastInteraction = interaction;
+        lastInteractionTimes = times;
     }
-    public boolean updateLastAction(String type) {
-        if (lastAction == null || !type.startsWith(lastAction)) {
-            setLastAction(type,1);
+    public boolean updateLastAction(Interaction interaction) {
+        if (lastInteraction != interaction) {
+            setLastInteraction(interaction,1);
             return false;
         }
-        int times = lastActionTimes+1;
-        setLastAction(type,times);
+        int times = lastInteractionTimes + 1;
+        setLastInteraction(interaction,times);
         return times >= RealVillagerTowns.getInstance().getConfig().getInt("maxSameInteraction");
     }
 

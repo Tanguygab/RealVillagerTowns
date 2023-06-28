@@ -5,13 +5,12 @@ import io.github.tanguygab.realvillagertowns.villagers.RVTVillager;
 import io.github.tanguygab.realvillagertowns.villagers.VillagerManager;
 import lombok.NonNull;
 import org.bukkit.ChatColor;
+import org.bukkit.block.Block;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Villager;
+import org.bukkit.entity.*;
+import org.bukkit.util.BlockIterator;
 
 import java.util.List;
 import java.util.Objects;
@@ -85,7 +84,7 @@ public class RVTCommand implements CommandExecutor {
         }
         switch (arg) {
             case "skin" -> {
-                if (Utils.getTarget(p) instanceof LivingEntity v && vm.isVillagerEntity(v)) {
+                if (getTarget(p) instanceof LivingEntity v && vm.isVillagerEntity(v)) {
                     String skin = vm.getVillager(v).getSkin();
                     sendMessage(sender, "&eThat villagers skin is: " + skin);
                 } else sendMessage(sender, "&cYou're not looking at a villager!");
@@ -95,7 +94,7 @@ public class RVTCommand implements CommandExecutor {
                     sendMessage(sender, "&cLivingEntities automatically change!");
                     return;
                 }
-                if (Utils.getTarget(p) instanceof LivingEntity v && vm.isVillagerEntity(v)) {
+                if (getTarget(p) instanceof LivingEntity v && vm.isVillagerEntity(v)) {
                     vm.makeVillager(v);
                     sendMessage(sender, "&eLivingEntity changed to RVT version!");
                 } else sendMessage(sender, "&cYou're not looking at a villager!");
@@ -108,7 +107,7 @@ public class RVTCommand implements CommandExecutor {
                 }
                 switch (arg) {
                     case "fixskin" -> {
-                        if (Utils.getTarget(p) instanceof LivingEntity v && vm.isVillagerEntity(v)) {
+                        if (getTarget(p) instanceof LivingEntity v && vm.isVillagerEntity(v)) {
                             String newSkin = args[1];
                             RVTVillager villager = vm.getVillager(v);
                             String oldSkin = villager.getSkin();
@@ -124,7 +123,7 @@ public class RVTCommand implements CommandExecutor {
                             return;
                         }
 
-                        if (Utils.getTarget(p) instanceof LivingEntity v && vm.isVillagerEntity(v)) {
+                        if (getTarget(p) instanceof LivingEntity v && vm.isVillagerEntity(v)) {
                             rvt.like(vm.getPlayer(player), vm.getVillager(v));
                             sendMessage(sender,"&eThat villager now likes " + player.getName() + "!");
                         } else sendMessage(sender,"&cYou're not looking at a villager!");
@@ -139,7 +138,7 @@ public class RVTCommand implements CommandExecutor {
                         sendMessage(sender,"&eCleared " + player.getName() + "'s baby.");
                     }
                     case "setprofession" -> {
-                        if (!(Utils.getTarget(p) instanceof Villager v)) {
+                        if (!(getTarget(p) instanceof Villager v)) {
                             sendMessage(sender,"&cYou're not looking at a villager!");
                             return;
                         }
@@ -173,6 +172,28 @@ public class RVTCommand implements CommandExecutor {
         }
         message.append("\n/rvt sex <male/female>");
         sendMessage(sender,message.toString());
+    }
+
+    private Entity getTarget(Player player) {
+        BlockIterator iterator = new BlockIterator(player.getWorld(), player.getLocation().toVector(), player.getEyeLocation().getDirection(), 0.0D, 100);
+        while (iterator.hasNext()) {
+            Block item = iterator.next();
+            for (Entity entity : player.getNearbyEntities(100.0D, 100.0D, 100.0D)) {
+                if (entity instanceof LivingEntity && !entity.getType().equals(EntityType.BAT)) {
+                    int acc = 2;
+                    for (int x = -acc; x < acc; x++) {
+                        for (int z = -acc; z < acc; z++) {
+                            for (int y = -acc; y < acc; y++) {
+                                if (entity.getLocation().getBlock()
+                                        .getRelative(x, y, z).equals(item))
+                                    return entity;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return null;
     }
 
 }

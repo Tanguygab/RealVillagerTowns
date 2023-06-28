@@ -1,17 +1,16 @@
 package io.github.tanguygab.realvillagertowns;
 
-import org.bukkit.entity.Arrow;
-import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Entity;
 import org.bukkit.plugin.Plugin;
 import org.bukkit.scheduler.BukkitRunnable;
 import org.bukkit.util.Vector;
 
-class ArrowHomingTask extends BukkitRunnable {
+public class ArrowHomingTask extends BukkitRunnable {
 
-    private final Arrow arrow;
-    private final LivingEntity target;
+    private final Entity arrow;
+    private final Entity target;
 
-    public ArrowHomingTask(Arrow arrow, LivingEntity target, Plugin plugin) {
+    public ArrowHomingTask(Entity arrow, Entity target, Plugin plugin) {
         this.arrow = arrow;
         this.target = target;
         runTaskTimer(plugin, 1L, 1L);

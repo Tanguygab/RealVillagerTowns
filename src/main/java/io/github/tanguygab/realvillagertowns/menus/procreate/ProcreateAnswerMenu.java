@@ -2,7 +2,6 @@ package io.github.tanguygab.realvillagertowns.menus.procreate;
 
 import io.github.tanguygab.realvillagertowns.menus.AskMenu;
 import io.github.tanguygab.realvillagertowns.villagers.RVTPlayer;
-import org.bukkit.entity.Player;
 
 public class ProcreateAnswerMenu extends AskMenu {
 

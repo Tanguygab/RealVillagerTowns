@@ -19,10 +19,8 @@ public abstract class AskMenu extends RVTMenu {
 
     @Override
     public void onOpen() {
-        ItemStack y = createMenuItem(Material.SLIME_BALL, "&2Yes", "&8I want to", "&8"+action);
-        inv.setItem(1, y);
-        ItemStack n = createMenuItem(Material.MAGMA_CREAM, "&cNo", "&8I don't want to", "&8"+action);
-        inv.setItem(3, n);
+        inv.setItem(1, createMenuItem(Material.SLIME_BALL, "&2Yes", "&8I want to", "&8"+action));
+        inv.setItem(3, createMenuItem(Material.MAGMA_CREAM, "&cNo", "&8I don't want to", "&8"+action));
         open();
     }
 

@@ -1,7 +1,7 @@
 package io.github.tanguygab.realvillagertowns.listeners;
 
 import io.github.tanguygab.realvillagertowns.Utils;
-import io.github.tanguygab.realvillagertowns.villagers.Mood;
+import io.github.tanguygab.realvillagertowns.villagers.enums.Mood;
 import io.github.tanguygab.realvillagertowns.villagers.RVTVillager;
 import io.github.tanguygab.realvillagertowns.villagers.VillagerManager;
 import org.bukkit.entity.Entity;

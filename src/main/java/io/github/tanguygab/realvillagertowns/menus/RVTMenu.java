@@ -65,8 +65,4 @@ public abstract class RVTMenu {
         return item;
     }
 
-    protected String getLang(String str) {
-        return rvt.getLang(str);
-    }
-
 }

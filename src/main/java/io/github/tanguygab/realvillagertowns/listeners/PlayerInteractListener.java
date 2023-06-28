@@ -4,10 +4,11 @@ import io.github.tanguygab.realvillagertowns.RealVillagerTowns;
 import io.github.tanguygab.realvillagertowns.menus.VillagerMenu;
 import io.github.tanguygab.realvillagertowns.menus.marry.MarryMenu;
 import io.github.tanguygab.realvillagertowns.menus.procreate.ProcreateMenu;
-import io.github.tanguygab.realvillagertowns.villagers.Gender;
+import io.github.tanguygab.realvillagertowns.villagers.enums.Gender;
 import io.github.tanguygab.realvillagertowns.villagers.RVTPlayer;
 import io.github.tanguygab.realvillagertowns.villagers.RVTVillager;
 import io.github.tanguygab.realvillagertowns.villagers.VillagerManager;
+import io.github.tanguygab.realvillagertowns.villagers.enums.Trait;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -40,14 +41,14 @@ public record PlayerInteractListener(RealVillagerTowns rvt, VillagerManager vm) 
                 UUID likes = villager.getLikes();
                 if (p.getUniqueId() == likes) {
                     p.getInventory().addItem(new ItemStack(Material.BLUE_ORCHID));
-                    String trait = villager.getTrait();
+                    Trait trait = villager.getTrait();
                     Gender pGender = vm.getPlayer(p).getGender();
                     String nice = "beautiful", type = "girl";
                     if (pGender == Gender.MALE) {
                         nice = "handsome";
                         type = "boy";
                     }
-                    player.sendMessage(rvt.getText(trait.toLowerCase() + "-gift", "Like", player, villager)
+                    player.sendMessage(rvt.getText(trait.toString().toLowerCase() + "-gift", "Like", player, villager)
                             .replace("<nice>", nice).replace("<sex2>", type));
                     rvt.giveItem(villager, null);
                     return;
@@ -85,8 +86,7 @@ public record PlayerInteractListener(RealVillagerTowns rvt, VillagerManager vm) 
             new ProcreateMenu(player,vm.getPlayer(clicked)).onOpen();
             return;
         }
-        if (rvt.getConfig().getList("playerButtons").contains("marry"))
-            new MarryMenu(player,vm.getPlayer(clicked)).onOpen();
+        new MarryMenu(player,vm.getPlayer(clicked)).onOpen();
     }
     private void clickedWolf(Wolf wolf, List<Entity> passengers) {
         if (passengers.isEmpty() || !vm.isVillagerEntity(passengers.get(0))) return;

@@ -1,4 +1,4 @@
-package io.github.tanguygab.realvillagertowns.villagers;
+package io.github.tanguygab.realvillagertowns.villagers.enums;
 
 import lombok.Getter;
 

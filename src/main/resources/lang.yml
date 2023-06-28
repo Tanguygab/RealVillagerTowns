@@ -1,25 +1,29 @@
-lang:
-  requestAid: "§7Request Aid"
-  trade: "§7Trade"
-  interact: "§7Interact"
-  setHome: "§7Set Home"
-  divorce: "§7Divorce Spouse"
-  adopt: "§7Adopt Baby"
-  marry: "§7Marry"
-  gift: "§7Gift"
+interactions:
   chat: "§7Chat"
   joke: "§7Joke"
   greet: "§7Greet"
   kiss: "§7Kiss"
   story: "§7Tell Story"
   flirt: "§7Flirt"
-  procreate: "§7Procreate"
   insult: "§7Insult"
   play: "§7Play"
   follow: "§7Follow"
-  stopFollow: "§7Stop Follow"
-  move: "§7Move"
+  stop-follow: "§7Stop Follow"
   stay: "§7Stay"
+  move: "§7Move"
+  procreate: "§7Procreate"
+  gift: "§7Gift"
+
+buttons:
+  trade: "§7Trade"
+  set-home: "§7Set Home"
+  request-aid: "§7Request Aid"
+  divorce: "§7Divorce Spouse"
+  adopt: "§7Adopt Baby"
+  interact: "§7Interact"
+  marry: "§7Marry"
+
+traits:
   shy: "Shy"
   fun: "Fun"
   serious: "Serious"
@@ -27,3 +31,38 @@ lang:
   irritable: "Irritable"
   emotional: "Emotional"
   outgoing: "Outgoing"
+
+moods:
+  happy:
+    - "Okay"
+    - "Fine"
+    - "Happy"
+    - "Cheerful"
+    - "Ecstatic"
+  neutral:
+    - "Passive"
+  sad:
+    - "Blue"
+    - "Unhappy"
+    - "Sad"
+    - "Cheerless"
+    - "Depressed"
+  angry:
+    - "Annoyed"
+    - "Agitated"
+    - "Mad"
+    - "Seething"
+    - "Infuriated"
+  fatigued:
+    - "Tired"
+    - "Sleepy"
+    - "Fatigued"
+    - "Exhausted"
+    - "Comatose"
+
+messages:
+  adopt: "You have adopted a baby!"
+  already-have-baby: "You already have a baby!"
+  divorce: "You have divorced your spouse <villager>"
+  drunk: "I'm feeling a bit tipsy..."
+  baby: "You had a baby with <player2>!"

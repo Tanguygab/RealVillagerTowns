@@ -5,9 +5,11 @@ import io.github.tanguygab.realvillagertowns.listeners.PlayerListener;
 import io.github.tanguygab.realvillagertowns.listeners.RVTListener;
 import io.github.tanguygab.realvillagertowns.listeners.VillagerListener;
 import io.github.tanguygab.realvillagertowns.villagers.*;
+import io.github.tanguygab.realvillagertowns.villagers.enums.*;
 import lombok.Getter;
 import org.bukkit.*;
 import org.bukkit.command.CommandExecutor;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.*;
 import org.bukkit.event.HandlerList;
@@ -16,7 +18,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.ShapedRecipe;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.bukkit.util.Vector;
 
 import java.io.*;
 import java.time.LocalDateTime;
@@ -27,10 +28,10 @@ public final class RealVillagerTowns extends JavaPlugin {
 
     @Getter private static RealVillagerTowns instance;
 
+    private final File langFile = new File(getDataFolder(),"lang.yml");
+    @Getter private FileConfiguration lang;
     private final File dataFile = new File(getDataFolder(), "data.yml");
-    public YamlConfiguration data = YamlConfiguration.loadConfiguration(dataFile);
-    private final File langFile = new File(getDataFolder(), "lang.yml");
-    private YamlConfiguration lang = YamlConfiguration.loadConfiguration(langFile);
+    public FileConfiguration data;
 
     @Getter private VillagerManager villagerManager;
     @Getter private Interact interact;
@@ -49,9 +50,9 @@ public final class RealVillagerTowns extends JavaPlugin {
 
         getAidItems();
         addRecipes();
-        getServer().getScheduler().scheduleSyncRepeatingTask(this,this::slowTimer,120,120);
-        long longTimerTime = getConfig().getInt("likeTimer") * 20L;
-        getServer().getScheduler().scheduleSyncRepeatingTask(this, this::longTimer, longTimerTime,longTimerTime);
+        getServer().getScheduler().scheduleSyncRepeatingTask(this,this::slowTimer,0,120);
+        getServer().getScheduler().scheduleSyncRepeatingTask(this, this::longTimer, 0,getConfig().getInt("likeTimer") * 20L);
+        getServer().getScheduler().scheduleSyncRepeatingTask(this, villagerManager::shootArrows,0,100);
         interact = new Interact(this);
 
         registerEvents(new RVTListener(this,villagerManager),
@@ -72,14 +73,16 @@ public final class RealVillagerTowns extends JavaPlugin {
     }
 
     public void loadFiles() {
-        saveDefaultConfig();
-        reloadConfig();
+        new RVTConfig(this);
+
+        if (!langFile.exists()) saveResource("lang.yml", false);
+        lang = YamlConfiguration.loadConfiguration(langFile);
+
         if (!dataFile.exists()) {
             try {dataFile.createNewFile();}
             catch (IOException e) {e.printStackTrace();}
         }
-        if (!langFile.exists()) saveResource("lang.yml", false);
-        lang = YamlConfiguration.loadConfiguration(langFile);
+        data = YamlConfiguration.loadConfiguration(dataFile);
     }
 
     public void set(String path, Object value) {
@@ -140,43 +143,6 @@ public final class RealVillagerTowns extends JavaPlugin {
         }
     }
 
-
-    public void shootArrows(final LivingEntity v) {
-        if (v.isDead()) return;
-        int r = getConfig().getInt("shootRadius");
-        for (Entity e : v.getNearbyEntities(r, r, r)) {
-            if (getConfig().getList("hostileMobs").contains(e.getType().toString())) {
-                shootArrow(v, e);
-                break;
-            }
-        }
-        getServer().getScheduler().scheduleSyncDelayedTask(this, () -> shootArrows(v),  100L);
-    }
-    public void shootArrow(LivingEntity atc, Entity vic) {
-        Location loc1 = vic.getLocation();
-        Location loc2 = atc.getLocation();
-        loc2.setY(loc2.getY() + 1.0D);
-        loc2.setX(loc2.getBlockX() + 0.5D);
-        loc2.setZ(loc2.getBlockZ() + 0.5D);
-        int arrowSpeed = 1;
-        Arrow a = atc.getWorld().spawnArrow(loc2, new Vector(loc1.getX() - loc2.getX(), loc1.getY() - loc2.getY(), loc1.getZ() - loc2.getZ()), arrowSpeed, 12.0F);
-        a.setShooter(atc);
-        double minAngle = 6.283185307179586D;
-        LivingEntity minEntity = null;
-        for (Entity entity : atc.getNearbyEntities(64.0D, 64.0D, 64.0D)) {
-            if (atc.hasLineOfSight(entity) && entity instanceof LivingEntity v && !entity.isDead()) {
-                Vector toTarget = entity.getLocation().toVector().clone().subtract(atc.getLocation().toVector());
-                double angle = a.getVelocity().angle(toTarget);
-                if (angle < minAngle) {
-                    minAngle = angle;
-                    minEntity = v;
-                }
-            }
-        }
-        if (minEntity != null) new ArrowHomingTask(a,minEntity,this);
-    }
-
-
     public void getAidItems() {
         for (String mat : getConfig().getConfigurationSection("aidItems").getKeys(false)) {
             Material material = Material.getMaterial(mat);
@@ -186,10 +152,6 @@ public final class RealVillagerTowns extends JavaPlugin {
             }
             aidItemList.add(new ItemStack(material, getConfig().getInt("aidItems." + mat)));
         }
-    }
-
-    public String getLang(String str) {
-        return lang.getString("lang." + str).replace("&", "§");
     }
 
     public void playerProcreate(RVTPlayer p, RVTPlayer proposer) {
@@ -214,28 +176,6 @@ public final class RealVillagerTowns extends JavaPlugin {
         proposer.marry(p.getUniqueId(),RVTEntityType.PLAYER);
     }
 
-    public ItemStack getInfo(RVTPlayer p, RVTVillager v) {
-        String name = v.getName();
-        int hearts = p.getHappiness(v);
-        String trait = v.getTrait();
-        String mood = v.getDrunk() > 0 ? "drunk" : getConfig().getString("moods."+v.getMood()+v.getMoodLevel());
-        UUID parentId = v.getParent1();
-        RVTEntityType parentType = v.getParentType();
-        String parent = parentType == RVTEntityType.PLAYER
-                ? villagerManager.getPlayer(parentId).getName()
-                : villagerManager.getVillager(parentId).getName();
-
-        String partnerId = data.getString("villagers." + v.getUniqueId() + ".partner");
-        String partnerType = data.getString("villagers." + v.getUniqueId() + ".married");
-        String partner = data.getString(partnerType + "s." + partnerId + ".name");
-        String sex = data.getString("villagers." + v.getUniqueId() + ".sex");
-
-        List<String> lore = new ArrayList<>(List.of("§7Name: §8" + name, "§7Hearts: §8" + hearts, "§7Sex: §8" + sex, "§7Trait: §8" + getLang(trait), "§7Mood: §8" + mood));
-        if (parent != null) lore.add("§7Child of: §8" + parent);
-        if (partner != null) lore.add("§7Married to: §8" + partner);
-        return Utils.getItem(Material.LIME_DYE, "§2Info", 1, lore);
-    }
-
     public void divorce(RVTPlayer player) {
         UUID partnerUUID = player.getPartner();
         if (partnerUUID == null) {
@@ -252,13 +192,13 @@ public final class RealVillagerTowns extends JavaPlugin {
         player.sendMessage(partner.getName()+ ": "+Utils.getListItem("speechSpouse.divorce").replace("<player>", player.getName()));
     }
 
-    public void adoptBaby(RVTPlayer p) {
-        if (p.isHasBaby()) {
-            p.sendMessage(getConfig().getString("haveBabyMessage"));
+    public void adoptBaby(RVTPlayer player) {
+        if (player.isHasBaby()) {
+            player.sendMessage(getConfig().getString("haveBabyMessage"));
             return;
         }
-        p.sendMessage(getConfig().getString("adoptMessage"));
-        makeBaby(p,null);
+        player.sendMessage(getConfig().getString("adoptMessage"));
+        makeBaby(player,null);
     }
     public void makeBaby(RVTPlayer player, RVTVillager villager) {
         Villager baby = player.getPlayer().getWorld().spawn(player.getPlayer().getLocation(), Villager.class);
@@ -353,7 +293,7 @@ public final class RealVillagerTowns extends JavaPlugin {
         if (amount <= 0) inv.setItemInMainHand(null);
         else gift.setAmount(amount);
 
-        GiftType type = Utils.getGiftType(gift);
+        GiftType type = GiftType.fromItem(gift);
         switch (type) {
             case BOW -> giveItem(villager, new ItemStack(Material.BOW));
             case RING -> marry(player, villager);
