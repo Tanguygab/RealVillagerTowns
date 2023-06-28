@@ -264,10 +264,6 @@ public final class RealVillagerTowns extends JavaPlugin {
         String family = player.getChildren().contains(villager.getUniqueId()) && villager.isBaby() ? "Child"
                 : player.getPartner() == villager.getUniqueId() ? "Spouse" : "";
         return getText(type, family, player, villager);
-        //Message is never null as far as I can see?
-        //if (message == null) message = getText(type, "", p, v);
-        //if (message == null) message = "Message Error!";
-        //return message;
     }
 
 

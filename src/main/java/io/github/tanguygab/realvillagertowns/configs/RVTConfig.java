@@ -126,6 +126,6 @@ public class RVTConfig {
     }
 
     public boolean getBabyChance() {
-        return Utils.random(1, BABY_CHANCE ) != 1;
+        return Utils.random(1, BABY_CHANCE) != 1;
     }
 }

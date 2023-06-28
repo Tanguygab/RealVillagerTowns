@@ -9,7 +9,6 @@ import io.github.tanguygab.realvillagertowns.villagers.enums.Trait;
 import lombok.*;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Particle;
 import org.bukkit.entity.Ageable;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.potion.PotionEffect;
@@ -90,12 +89,10 @@ public class RVTVillager {
     }
 
     public void jump() {
-        Location l = entity.getLocation();
-        l.setY(l.getY() + 1.5D);
-        Utils.displayParticle(Particle.HEART, l, 0.3D, 1, 3);
-        Vector v = new Vector();
-        v.setY(0.3D);
-        entity.setVelocity(v);
+        Location loc = entity.getLocation();
+        loc.setY(loc.getY() + 1.5D);
+        Utils.displayParticle(loc);
+        entity.setVelocity(new Vector().setY(0.3D));
     }
 
     public void updateMood() {

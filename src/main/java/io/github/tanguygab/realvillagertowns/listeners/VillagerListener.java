@@ -1,6 +1,7 @@
 package io.github.tanguygab.realvillagertowns.listeners;
 
 import io.github.tanguygab.realvillagertowns.villagers.RVTPlayer;
+import io.github.tanguygab.realvillagertowns.villagers.RVTVillager;
 import io.github.tanguygab.realvillagertowns.villagers.VillagerManager;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -10,8 +11,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
-
-import java.util.UUID;
 
 public record VillagerListener(VillagerManager vm) implements Listener {
 
@@ -38,9 +37,9 @@ public record VillagerListener(VillagerManager vm) implements Listener {
     public void onPlayerTarget(EntityTargetEvent e) {
         Entity entity = e.getEntity();
         if (!vm.isVillager(entity) || !(e.getTarget() instanceof Player p)) return;
-        UUID villagerUUID = entity.getUniqueId();
+        RVTVillager villager = vm.getVillager(entity);
         RVTPlayer player = vm.getPlayer(p);
-        if (player.getLikes().contains(villagerUUID) && (player.getHappiness().getOrDefault(villagerUUID,0) > 25 || vm.getVillager(entity).getDrunk() >= 1))
+        if (player.getLikes().contains(villager.getUniqueId()) && (player.getHappiness(villager) > 25 || villager.getDrunk() >= 1))
             e.setCancelled(true);
     }
 

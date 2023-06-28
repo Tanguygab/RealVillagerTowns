@@ -1,8 +1,6 @@
 package io.github.tanguygab.realvillagertowns;
 
 import org.bukkit.*;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,30 +17,8 @@ public class Utils {
         return random.nextInt(max - min + 1) + min;
     }
 
-    public static void displayParticle(Particle particles, Location l, double radius, int speed, int amount) {
-        World w = l.getWorld();
-        assert w != null;
-        if (radius == 0.0D) {
-            w.spawnParticle(particles, l, 0, 0.0D, 0.0D, speed, amount);
-            return;
-        }
-        List<Location> ll = getArea(l, radius, 0.2D);
-        for (int i = 0; i < amount; i++) {
-            int index = random(ll.size());
-            w.spawnParticle(particles, ll.get(index), 0, 0.0D, 0.0D, speed, 1.0D);
-            ll.remove(index);
-        }
-    }
-
-    public static List<Location> getArea(Location l, double r, double t) {
-        List<Location> ll = new ArrayList<>();
-        for (double x = l.getX() - r; x < l.getX() + r; x += t) {
-            for (double y = l.getY() - r; y < l.getY() + r; y += t) {
-                for (double z = l.getZ() - r; z < l.getZ() + r; z += t)
-                    ll.add(new Location(l.getWorld(), x, y, z));
-            }
-        }
-        return ll;
+    public static String colors(String str) {
+        return ChatColor.translateAlternateColorCodes('&',str);
     }
 
     // This won't work anymore since I split things across 3 different files
@@ -52,7 +28,22 @@ public class Utils {
         return list.get(index);
     }
 
-    public static String colors(String str) {
-        return ChatColor.translateAlternateColorCodes('&',str);
+    public static void displayParticle(Location loc) {
+        World world = loc.getWorld();
+        if (world == null) return;
+
+        double r = 0.3D, t = 0.2D;
+        List<Location> locations = new ArrayList<>();
+        for (double x = loc.getX() - r; x < loc.getX() + r; x += t)
+            for (double y = loc.getY() - r; y < loc.getY() + r; y += t)
+                for (double z = loc.getZ() - r; z < loc.getZ() + r; z += t)
+                    locations.add(new Location(loc.getWorld(), x, y, z));
+
+        for (int i = 0; i < 3; i++) {
+            int index = random(locations.size());
+            world.spawnParticle(Particle.HEART, locations.get(index), 0, 0.0D, 0.0D, 1, 1.0D);
+            locations.remove(index);
+        }
     }
+
 }

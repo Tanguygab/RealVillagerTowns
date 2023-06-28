@@ -3,9 +3,7 @@ package io.github.tanguygab.realvillagertowns.menus;
 import io.github.tanguygab.realvillagertowns.villagers.RVTPlayer;
 import io.github.tanguygab.realvillagertowns.villagers.RVTVillager;
 import io.github.tanguygab.realvillagertowns.villagers.enums.Button;
-import io.github.tanguygab.realvillagertowns.villagers.enums.Gender;
 import io.github.tanguygab.realvillagertowns.villagers.enums.RVTEntityType;
-import io.github.tanguygab.realvillagertowns.villagers.enums.Trait;
 import org.bukkit.Material;
 import org.bukkit.entity.Villager;
 import org.bukkit.event.inventory.ClickType;
@@ -82,23 +80,18 @@ public class VillagerMenu extends RVTMenu {
     }
 
     public ItemStack getInfo(RVTPlayer p, RVTVillager villager) {
-        String name = villager.getName();
-        int hearts = p.getHappiness(villager);
-        Trait trait = villager.getTrait();
-        Gender sex = villager.getGender();
         String mood = villager.getDrunk() > 0 ? "Drunk" : villager.getMood().getLang(villager.getMoodLevel());
 
         UUID parentId = villager.getParent1();
-        String parent = villager.getParentType() == RVTEntityType.PLAYER
-                ? vm.getPlayer(parentId).getName()
-                : vm.getVillager(parentId).getName();
-
+        String parent = villager.getParentType() == RVTEntityType.PLAYER ? vm.getPlayer(parentId).getName() : vm.getVillager(parentId).getName();
         UUID partnerId = villager.getPartner();
-        String partner = villager.getPartnerType() == RVTEntityType.PLAYER
-                ? vm.getPlayer(partnerId).getName()
-                : vm.getVillager(partnerId).getName();
+        String partner = villager.getPartnerType() == RVTEntityType.PLAYER ? vm.getPlayer(partnerId).getName() : vm.getVillager(partnerId).getName();
 
-        String lore = "§7Name: §8"+name+"\n§7Hearts: §8"+hearts+"\n§7Sex: §8"+sex+"\n§7Trait: §8"+trait.getLang()+"\n§7Mood: §8"+mood;
+        String lore = "§7Name: §8"+villager.getName()
+                +"\n§7Hearts: §8"+p.getHappiness(villager)
+                +"\n§7Sex: §8"+villager.getGender()
+                +"\n§7Trait: §8"+villager.getTrait().getLang()
+                +"\n§7Mood: §8"+mood;
         if (parent != null) lore+="\n§7Child of: §8" + parent;
         if (partner != null) lore+="\n§7Married to: §8" + partner;
         return createMenuItem(Material.LIME_DYE, "§2Info", lore.split("\n"));

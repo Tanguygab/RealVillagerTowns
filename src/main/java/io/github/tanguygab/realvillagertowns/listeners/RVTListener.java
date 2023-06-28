@@ -50,6 +50,10 @@ public record RVTListener(RealVillagerTowns rvt, VillagerManager vm) implements 
 
     @EventHandler
     public void onInventoryClose(InventoryCloseEvent e) {
+        //still no idea how this works, found nothing that really used tradeList
+        if (e.getInventory().getHolder() instanceof Player p)
+            vm.getPlayer(p).setTrading(false);
+
         if (!(e.getPlayer() instanceof Player p)) return;
         RVTPlayer player = vm.getPlayer(p);
         RVTMenu menu = RVTMenu.openedMenus.get(player);
@@ -57,10 +61,4 @@ public record RVTListener(RealVillagerTowns rvt, VillagerManager vm) implements 
             RVTMenu.openedMenus.get(player).onClose();
     }
 
-    //still no idea how this works, found nothing that really used tradeList
-    @EventHandler
-    public void onInvClose(InventoryCloseEvent e) {
-        if (e.getInventory().getHolder() instanceof Player p)
-            vm.getPlayer(p).setTrading(false);
-    }
 }

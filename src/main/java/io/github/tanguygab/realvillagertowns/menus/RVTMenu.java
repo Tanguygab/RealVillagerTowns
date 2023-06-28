@@ -4,8 +4,6 @@ import io.github.tanguygab.realvillagertowns.RealVillagerTowns;
 import io.github.tanguygab.realvillagertowns.Utils;
 import io.github.tanguygab.realvillagertowns.villagers.RVTPlayer;
 import io.github.tanguygab.realvillagertowns.villagers.VillagerManager;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryType;
@@ -30,12 +28,12 @@ public abstract class RVTMenu {
 
     public RVTMenu(RVTPlayer player, String title, int rows) {
         this.player = player;
-        inv = Bukkit.getServer().createInventory(null,rows*9,Utils.colors(title));
+        inv = rvt.getServer().createInventory(null,rows*9,colors(title));
         openedMenus.put(player,this);
     }
     public RVTMenu(RVTPlayer player, String title, InventoryType invType) {
         this.player = player;
-        inv = Bukkit.getServer().createInventory(null,invType,title);
+        inv = rvt.getServer().createInventory(null,invType,title);
         openedMenus.put(player,this);
     }
 
@@ -54,15 +52,18 @@ public abstract class RVTMenu {
         ItemStack item = new ItemStack(mat);
         ItemMeta meta = item.getItemMeta();
         assert meta != null;
-        meta.setDisplayName(Utils.colors("&f"+name));
+        meta.setDisplayName(colors("&f"+name));
         if (lore.length != 0) {
             List<String> loreList = new ArrayList<>();
-            for (String line : lore)
-                loreList.add(ChatColor.GRAY + Utils.colors(line));
+            for (String line : lore) loreList.add(colors("&7"+line));
             meta.setLore(loreList);
         }
         item.setItemMeta(meta);
         return item;
+    }
+
+    protected static String colors(String str) {
+        return Utils.colors(str);
     }
 
 }

@@ -5,10 +5,10 @@ import io.github.tanguygab.realvillagertowns.menus.VillagerMenu;
 import io.github.tanguygab.realvillagertowns.menus.marry.MarryMenu;
 import io.github.tanguygab.realvillagertowns.menus.procreate.ProcreateMenu;
 import io.github.tanguygab.realvillagertowns.villagers.enums.Gender;
+import io.github.tanguygab.realvillagertowns.villagers.enums.Trait;
 import io.github.tanguygab.realvillagertowns.villagers.RVTPlayer;
 import io.github.tanguygab.realvillagertowns.villagers.RVTVillager;
 import io.github.tanguygab.realvillagertowns.villagers.VillagerManager;
-import io.github.tanguygab.realvillagertowns.villagers.enums.Trait;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -20,7 +20,6 @@ import org.bukkit.event.player.PlayerInteractEntityEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
-import java.util.UUID;
 
 public record PlayerInteractListener(RealVillagerTowns rvt, VillagerManager vm) implements Listener {
 
@@ -37,22 +36,16 @@ public record PlayerInteractListener(RealVillagerTowns rvt, VillagerManager vm) 
                 && !clicked.hasMetadata("shopkeeper")) {
             e.setCancelled(true);
             RVTVillager villager = vm.getVillager(clicked);
-            if (villager.getInHand() == Material.POPPY) {
-                UUID likes = villager.getLikes();
-                if (p.getUniqueId() == likes) {
-                    p.getInventory().addItem(new ItemStack(Material.BLUE_ORCHID));
-                    Trait trait = villager.getTrait();
-                    Gender pGender = vm.getPlayer(p).getGender();
-                    String nice = "beautiful", type = "girl";
-                    if (pGender == Gender.MALE) {
-                        nice = "handsome";
-                        type = "boy";
-                    }
-                    player.sendMessage(rvt.getText(trait.toString().toLowerCase() + "-gift", "Like", player, villager)
-                            .replace("<nice>", nice).replace("<sex2>", type));
-                    rvt.giveItem(villager, null);
-                    return;
-                }
+            if (villager.getInHand() == Material.POPPY && p.getUniqueId() == villager.getLikes()) {
+                p.getInventory().addItem(new ItemStack(Material.BLUE_ORCHID));
+                Trait trait = villager.getTrait();
+                Gender pGender = vm.getPlayer(p).getGender();
+                String nice = pGender == Gender.MALE ? "handsome" : "beautiful";
+
+                player.sendMessage(rvt.getText(trait.toString().toLowerCase() + "-gift", "Like", player, villager)
+                        .replace("<nice>", nice).replace("<sex2>", pGender.getChild()));
+                rvt.giveItem(villager, null);
+                return;
             }
             if (player.getGifting() == villager) {
                 rvt.giveGift(player, villager);
