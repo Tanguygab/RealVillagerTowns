@@ -72,13 +72,13 @@ public class RVTConfig {
         AID_COOLDOWN = cfg.getInt("like-timer",30);
         ConfigurationSection items = cfg.getConfigurationSection("aidItems");
         if (items != null)
-            items.getKeys(false).forEach(mat->{
+            items.getValues(false).forEach((mat,amount)->{
                 Material material = Material.getMaterial(mat);
                 if (material == null) {
                     rvt.getLogger().severe("Invalid aidItem material type \""+mat+"\"! Skipping...");
                     return;
                 }
-                AID_ITEMS.add(new ItemStack(material, items.getInt(mat)));
+                AID_ITEMS.add(new ItemStack(material, (int) amount));
             });
 
         SHOOT_RADIUS = cfg.getInt("shoot-radius",15);

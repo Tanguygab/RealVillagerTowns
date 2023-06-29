@@ -1,10 +1,12 @@
 package io.github.tanguygab.realvillagertowns;
 
 import io.github.tanguygab.realvillagertowns.villagers.enums.Interaction;
-import io.github.tanguygab.realvillagertowns.villagers.enums.Mood;
+import io.github.tanguygab.realvillagertowns.villagers.enums.entity.Mood;
 import io.github.tanguygab.realvillagertowns.villagers.RVTPlayer;
 import io.github.tanguygab.realvillagertowns.villagers.RVTVillager;
-import io.github.tanguygab.realvillagertowns.villagers.enums.Trait;
+import io.github.tanguygab.realvillagertowns.villagers.enums.entity.Trait;
+import io.github.tanguygab.realvillagertowns.villagers.enums.speeches.BooleanSpeech;
+import io.github.tanguygab.realvillagertowns.villagers.enums.speeches.Speech;
 import lombok.NonNull;
 import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.disguisetypes.DisguiseType;
@@ -78,11 +80,11 @@ public class Interact {
         if (max < 1) max = 1;
         int r = Utils.random(max - min + 1) + min;
         if (r == 1) {
-            player.speech(interaction + "-good", villager);
+            BooleanSpeech.fromInteraction(interaction).sendGood(player,villager);
             player.setHappiness(villager, Utils.random(1, 10));
             return;
         }
-        player.speech(interaction + "-bad", villager);
+        BooleanSpeech.fromInteraction(interaction).sendBad(player,villager);
         player.setHappiness(villager, Utils.random(-10, -1));
     }
     private void greet(RVTPlayer player, RVTVillager villager, Trait trait, int max, int min, int hearts) {
@@ -99,11 +101,11 @@ public class Interact {
         if (max < 1) max = 1;
         int r = Utils.random(max - min + 1) + min;
         if (r == 1) {
-            player.speech("greet-good", villager);
+            BooleanSpeech.GREET.sendGood(player,villager);
             player.setHappiness(villager, Utils.random(1, 6));
             return;
         }
-        player.speech("greet-bad", villager);
+        BooleanSpeech.GREET.sendBad(player,villager);
         player.setHappiness(villager, Utils.random(-6, -1));
     }
     private void flirt(RVTPlayer player, RVTVillager villager, Trait trait, int max, int min, int hearts) {
@@ -124,7 +126,7 @@ public class Interact {
         if (max < 1) max = 1;
         int r = Utils.random(max - min + 1) + min;
         if (r == 1) {
-            player.speech("flirt-good", villager);
+            BooleanSpeech.FLIRT.sendGood(player,villager);
             player.setHappiness(villager, Utils.random(2, 10));
             int swing = Utils.random(-8, 1);
             if (swing < 0)
@@ -133,7 +135,7 @@ public class Interact {
             player.getLikes().add(villager.getUniqueId());
             return;
         }
-        player.speech("flirt-bad", villager);
+        BooleanSpeech.FLIRT.sendBad(player,villager);
         player.setHappiness(villager, Utils.random(-10, -2));
         int swing = Utils.random(-8, 1);
         swing *= -1;
@@ -160,26 +162,26 @@ public class Interact {
         if (max < 1) max = 1;
         int r = Utils.random(max - min + 1) + min;
         if (r == 1) {
-            player.speech("kiss-good", villager);
+            BooleanSpeech.KISS.sendGood(player,villager);
             player.setHappiness(villager, Utils.random(5, 15));
             int swing = Utils.random(-5, 1);
             villager.swingMood(Math.max(swing, 0));
             return;
         }
-        player.speech("kiss-bad", villager);
+        BooleanSpeech.KISS.sendBad(player,villager);
         player.setHappiness(villager, Utils.random(-15, -5));
         int swing = Math.max(Utils.random(-5, 1),0);
         swing *= -1;
         villager.swingMood(swing);
     }
     private void insult(RVTPlayer player, RVTVillager villager) {
-        player.speech("insult", villager);
+        Speech.INSULT.send(player,villager);
         player.setHappiness(villager, Utils.random(-15, -5));
     }
 
     @SuppressWarnings("deprecation")
     private void follow(@NonNull RVTPlayer player, RVTVillager villager) {
-        player.speech("follow", villager);
+        Speech.FOLLOW.send(player,villager);
         villager.setFollowed(player);
         LivingEntity v = villager.getEntity();
         Wolf wolf = v.getWorld().spawn(v.getLocation(), Wolf.class);

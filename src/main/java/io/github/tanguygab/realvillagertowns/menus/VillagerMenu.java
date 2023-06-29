@@ -3,7 +3,7 @@ package io.github.tanguygab.realvillagertowns.menus;
 import io.github.tanguygab.realvillagertowns.villagers.RVTPlayer;
 import io.github.tanguygab.realvillagertowns.villagers.RVTVillager;
 import io.github.tanguygab.realvillagertowns.villagers.enums.Button;
-import io.github.tanguygab.realvillagertowns.villagers.enums.RVTEntityType;
+import io.github.tanguygab.realvillagertowns.villagers.enums.entity.RVTEntityType;
 import org.bukkit.Material;
 import org.bukkit.entity.Villager;
 import org.bukkit.event.inventory.ClickType;

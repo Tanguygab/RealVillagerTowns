@@ -3,8 +3,13 @@ package io.github.tanguygab.realvillagertowns.villagers;
 import io.github.tanguygab.realvillagertowns.ArrowHomingTask;
 import io.github.tanguygab.realvillagertowns.RealVillagerTowns;
 import io.github.tanguygab.realvillagertowns.Utils;
-import io.github.tanguygab.realvillagertowns.villagers.enums.*;
 import io.github.tanguygab.realvillagertowns.villagers.enums.Interaction;
+import io.github.tanguygab.realvillagertowns.villagers.enums.entity.Gender;
+import io.github.tanguygab.realvillagertowns.villagers.enums.entity.Mood;
+import io.github.tanguygab.realvillagertowns.villagers.enums.entity.RVTEntityType;
+import io.github.tanguygab.realvillagertowns.villagers.enums.entity.Trait;
+import io.github.tanguygab.realvillagertowns.villagers.enums.speeches.BooleanSpeech;
+import io.github.tanguygab.realvillagertowns.villagers.enums.speeches.Speech;
 import lombok.Getter;
 import me.libraryaddict.disguise.DisguiseAPI;
 import me.libraryaddict.disguise.disguisetypes.PlayerDisguise;
@@ -26,10 +31,23 @@ public class VillagerManager {
     @Getter private final Map<UUID,RVTVillager> villagers = new HashMap<>();
     @Getter private final Map<UUID,RVTPlayer> players = new HashMap<>();
 
+    private final Map<Gender,List<String>> names = new HashMap<>();
+    private final Map<String,Map<Gender,List<String>>> skins = new HashMap<>();
 
     public VillagerManager(RealVillagerTowns rvt) {
         this.rvt = rvt;
         data = rvt.data;
+
+        names.put(Gender.MALE,rvt.getNames().getStringList("male"));
+        names.put(Gender.FEMALE,rvt.getNames().getStringList("female"));
+        rvt.getSkins().getKeys(false).forEach(profession->{
+            ConfigurationSection cfg = rvt.getSkins().getConfigurationSection(profession);
+            if (cfg == null) return;
+            Map<Gender,List<String>> skinMap = new HashMap<>();
+            skinMap.put(Gender.MALE,cfg.getStringList("male"));
+            skinMap.put(Gender.FEMALE,cfg.getStringList("female"));
+            skins.put(profession,skinMap);
+        });
 
         rvt.getServer().getWorlds().forEach(world->world.getLivingEntities().forEach(entity->{
             if (isVillagerEntity(entity)) makeVillager(entity);
@@ -70,11 +88,11 @@ public class VillagerManager {
             }
             type = villager.getProfession().getKey().getKey();
         } else type = entity.getType().getKey().getKey().replace("_", " ");
-        String skin = Utils.getListItem("skins."+gender+"."+type);
+        String skin = Utils.randomFromList(skins.getOrDefault(type,Map.of()).getOrDefault(gender,List.of("Steve")));
         String title = " the " + type;
 
-        String name = rvt.getConfiguration().USE_NAMES ? Utils.getListItem("names."+gender) : skin;
-        Trait trait = Trait.valueOf(Utils.getListItem("traits"));
+        String name = rvt.getConfiguration().USE_NAMES ? Utils.randomFromList(names.get(gender)) : skin;
+        Trait trait = Trait.values()[Utils.random(Trait.values().length)];
 
         return new RVTVillager(entity,uuid,name,gender,skin,title,trait);
     }
@@ -260,19 +278,19 @@ public class VillagerManager {
         int hearts = player.getHappiness(villager);
 
         if (hearts > 80 || (hearts > 0 && Utils.random(1, 5) == 1)) {
-            player.speech("procreate-yes", villager);
+            BooleanSpeech.PROCREATE.sendGood(player,villager);
             loveJump(villager);
             player.setHappiness(villager, Utils.random(-2, 10));
             if (baby) rvt.getServer().getScheduler().scheduleSyncDelayedTask(rvt, () -> rvt.makeBaby(player, villager), 42L);
             return;
         }
         if (player.updateLastInteraction(Interaction.PROCREATE)) {
-            player.speech("drunk", villager);
+            Speech.DRUNK.send(player,villager);
             loveJump(villager);
             player.setHappiness(villager, Utils.random(-25, 0));
             return;
         }
-        player.speech("procreate-no", villager);
+        BooleanSpeech.PROCREATE.sendBad(player,villager);
         player.setHappiness(villager, Utils.random(-10, 0));
     }
     public void loveJump(RVTVillager villager) {

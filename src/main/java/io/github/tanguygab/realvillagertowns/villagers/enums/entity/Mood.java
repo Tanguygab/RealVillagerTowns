@@ -1,4 +1,4 @@
-package io.github.tanguygab.realvillagertowns.villagers.enums;
+package io.github.tanguygab.realvillagertowns.villagers.enums.entity;
 
 import io.github.tanguygab.realvillagertowns.RealVillagerTowns;
 

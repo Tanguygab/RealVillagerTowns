@@ -163,7 +163,7 @@ normal:
   flirt-bad:
     - "That was bad."
     - "Not interested."
-    - "I bet you say that to all the <sex>s"
+    - "I bet you say that to all the <gender>s"
     - "Just stay away from me."
     - "Ewwww."
     - "Nice try."
@@ -251,7 +251,7 @@ spouse:
     - "Get far away from me!"
     - "Why are you doing this to me!"
     - "Am I not good enough for you?"
-    - "You told me you lived me!"
+    - "You told me you loved me!"
     - "Your a horrible person!"
     - "I'm too good for you anyway!"
   gift-bad:
@@ -545,53 +545,53 @@ child:
     - "Where are we going?"
     - "Where are you taking me?"
     - "Lets go!"
-like:
-  shy-gift:
+like-gift:
+  shy:
     - "Hey, here is a flower..."
     - "I um, think you're hot..."
     - "Hi..."
     - "Hi, um you're hot..."
     - "Um, you... me...?"
     - "You're pretty cute..."
-  fun-gift:
+  fun:
     - "You're pretty cute..."
     - "You should come over some time..."
     - "I really like you..."
     - "Lets go fishing together."
-    - "Here is flower, for a <nice> <sex2>."
+    - "Here is flower, for a <nice> <gender>."
     - "I wanted to say that your <nice>!"
-  serious-gift:
+  serious:
     - "Will you go out with me some time?"
-    - "Can I be your <sex> friend?"
+    - "Can I be your <gender>friend?"
     - "I want to get to know you better."
     - "Would you like to go out on a date?"
     - "I spoke to your father, he is fine with us going out."
     - "You are very <nice>."
-  friendly-gift:
-    - "Can I be your <sex> friend?"
+  friendly:
+    - "Can I be your <gender>friend?"
     - "Will you go out with me some time?"
     - "Your soooo hot!"
     - "Hey, <nice>!"
     - "You're so <nice>, so I got you this flower!"
-    - "Will you go out with me <sex2>?"
-  irritable-gift:
+    - "Will you go out with me <gender>?"
+  irritable:
     - "I guess you can have this flower."
     - "You can go out will me if you want."
     - "I wanted to say that your <nice>!"
     - "Will you um... Nothing."
     - "Will you go out with me some time?"
     - "Hi."
-  emotional-gift:
+  emotional:
     - "You're soooo hot!"
     - "Please go out with me?"
     - "I love you!"
     - "Here is a flower to show my affection!"
     - "*kiss*"
     - "I hope you like this."
-  outgoing-gift:
-    - "Can I be your <sex> friend?"
-    - "Will you go out with me <sex2>?"
+  outgoing:
+    - "Can I be your <gender>friend?"
+    - "Will you go out with me <gender>?"
     - "Wanna to back to my place?"
     - "Do you think I'm hot?"
     - "Here is a flower, now wanna go do it?"
-    - "Here is a <nice> flower for a <nice> <sex2>!"
+    - "Here is a beautiful flower for a <nice> <gender>!"

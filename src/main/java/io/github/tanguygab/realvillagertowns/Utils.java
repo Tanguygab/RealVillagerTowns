@@ -21,9 +21,7 @@ public class Utils {
         return ChatColor.translateAlternateColorCodes('&',str);
     }
 
-    // This won't work anymore since I split things across 3 different files
-    public static String getListItem(String listName) {
-        List<String> list = RealVillagerTowns.getInstance().getConfig().getStringList(listName);
+    public static String randomFromList(List<String> list) {
         int index = random.nextInt(list.size());
         return list.get(index);
     }

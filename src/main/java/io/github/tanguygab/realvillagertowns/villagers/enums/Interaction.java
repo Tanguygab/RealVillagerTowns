@@ -7,6 +7,7 @@ import lombok.Getter;
 
 import java.util.function.BiFunction;
 
+
 public enum Interaction {
     GIFT,
     CHAT,

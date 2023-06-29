@@ -8,6 +8,10 @@ import io.github.tanguygab.realvillagertowns.listeners.RVTListener;
 import io.github.tanguygab.realvillagertowns.listeners.VillagerListener;
 import io.github.tanguygab.realvillagertowns.villagers.*;
 import io.github.tanguygab.realvillagertowns.villagers.enums.*;
+import io.github.tanguygab.realvillagertowns.villagers.enums.entity.Mood;
+import io.github.tanguygab.realvillagertowns.villagers.enums.entity.RVTEntityType;
+import io.github.tanguygab.realvillagertowns.villagers.enums.speeches.BooleanSpeech;
+import io.github.tanguygab.realvillagertowns.villagers.enums.speeches.Speech;
 import lombok.Getter;
 import org.bukkit.*;
 import org.bukkit.command.CommandExecutor;
@@ -33,6 +37,13 @@ public final class RealVillagerTowns extends JavaPlugin {
     private final File langFile = new File(getDataFolder(),"lang.yml");
     @Getter private FileConfiguration lang;
     @Getter private RVTMessages messages;
+
+    private final File speechesFile = new File(getDataFolder(),"villagers/speeches.yml");
+    @Getter private FileConfiguration speeches;
+    private final File namesFile = new File(getDataFolder(),"villagers/names.yml");
+    @Getter private FileConfiguration names;
+    private final File skinsFile = new File(getDataFolder(),"villagers/skins.yml");
+    @Getter private FileConfiguration skins;
 
     private final File dataFile = new File(getDataFolder(), "data.yml");
     public FileConfiguration data;
@@ -81,6 +92,13 @@ public final class RealVillagerTowns extends JavaPlugin {
         if (!langFile.exists()) saveResource("lang.yml", false);
         lang = YamlConfiguration.loadConfiguration(langFile);
         messages = new RVTMessages(Objects.requireNonNull(lang.getConfigurationSection("messages")));
+
+        if (!speechesFile.exists()) saveResource("villagers/speeches.yml", false);
+        speeches = YamlConfiguration.loadConfiguration(speechesFile);
+        if (!namesFile.exists()) saveResource("villagers/names.yml", false);
+        names = YamlConfiguration.loadConfiguration(namesFile);
+        if (!skinsFile.exists()) saveResource("villagers/skins.yml", false);
+        skins = YamlConfiguration.loadConfiguration(skinsFile);
 
         if (!dataFile.exists()) {
             try {dataFile.createNewFile();}
@@ -186,7 +204,7 @@ public final class RealVillagerTowns extends JavaPlugin {
         player.setHappiness(partner,-250);
 
         player.sendMessage(messages.getDivorce(partner));
-        player.villagerMessage(partner,getSpeech("divorce",player,partner));
+        Speech.DIVORCE.send(player,partner);
     }
 
     public void adoptBaby(RVTPlayer player) {
@@ -229,14 +247,14 @@ public final class RealVillagerTowns extends JavaPlugin {
         int hearts = player.getHappiness(villager);
 
         if (player.getPartner() != null) {
-            player.speech("marry-cant", villager);
+            Speech.MARRY_CANT.send(player,villager);
             player.setHappiness(villager,Utils.random(-50, -20));
             villager.setMood(Mood.SAD,3);
             return;
         }
 
         if (configuration.enoughHeartsToMarry(hearts)) {
-            player.speech("marry-yes", villager);
+            BooleanSpeech.MARRY.sendGood(player,villager);
             player.setHappiness(villager, Utils.random(10, 30));
             villager.setMood(Mood.HAPPY,5);
 
@@ -244,39 +262,22 @@ public final class RealVillagerTowns extends JavaPlugin {
             villager.marry(player.getUniqueId(),RVTEntityType.PLAYER);
             return;
         }
-        player.speech("marry-no", villager);
+
+        BooleanSpeech.MARRY.sendBad(player,villager);
         player.setHappiness(villager,Utils.random(-50, -20));
         villager.setMood(Mood.ANGRY,3);
     }
 
-    public String getText(String type, String family, RVTPlayer player, RVTVillager villager) {
-        String parent1 = player.getGender().getParent();
-        String parent2 = villager.getGender().getParent();
-        String gen = villager.getGender().getChild();
-
-        return villager.getName() + ": " + Utils.getListItem("speech"+family+"."+type)
-                .replace("<player>", player.getName())
-                .replace("<parent>", parent1)
-                .replace("<parent2>", parent2)
-                .replace("<sex>", gen);
-    }
-    public String getSpeech(String type, RVTPlayer player, RVTVillager villager) {
-        String family = player.getChildren().contains(villager.getUniqueId()) && villager.isBaby() ? "Child"
-                : player.getPartner() == villager.getUniqueId() ? "Spouse" : "";
-        return getText(type, family, player, villager);
-    }
-
-
-    public void getAid(RVTPlayer p, RVTVillager villager) {
-        if (configuration.isOnCooldown(p.getAidCooldown())) {
-            p.speech("aid-no", villager);
-            p.setHappiness(villager, -1);
+    public void getAid(RVTPlayer player, RVTVillager villager) {
+        if (configuration.isOnCooldown(player.getAidCooldown())) {
+            BooleanSpeech.AID.sendBad(player,villager);
+            player.setHappiness(villager, -1);
             villager.swingMood(Math.max(Utils.random(-8, 1), 0));
             return;
         }
-        p.speech("aid-yes", villager);
-        p.getPlayer().getInventory().addItem(configuration.getAidItem());
-        p.setAidCooldown(LocalDateTime.now());
+        BooleanSpeech.AID.sendGood(player,villager);
+        player.getPlayer().getInventory().addItem(configuration.getAidItem());
+        player.setAidCooldown(LocalDateTime.now());
     }
 
     public void giveGift(RVTPlayer player, RVTVillager villager) {
@@ -298,7 +299,7 @@ public final class RealVillagerTowns extends JavaPlugin {
                 }
             }
             default -> {
-                player.speech("gift-" + type, villager);
+                Speech.fromGift(type).send(player,villager);
                 switch (type) {
                     case SMALL -> player.setHappiness(villager, 1);
                     case REGULAR -> player.setHappiness(villager, Utils.random(1, 5));

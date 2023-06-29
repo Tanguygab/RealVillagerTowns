@@ -4,8 +4,6 @@ import io.github.tanguygab.realvillagertowns.RealVillagerTowns;
 import io.github.tanguygab.realvillagertowns.menus.VillagerMenu;
 import io.github.tanguygab.realvillagertowns.menus.marry.MarryMenu;
 import io.github.tanguygab.realvillagertowns.menus.procreate.ProcreateMenu;
-import io.github.tanguygab.realvillagertowns.villagers.enums.Gender;
-import io.github.tanguygab.realvillagertowns.villagers.enums.Trait;
 import io.github.tanguygab.realvillagertowns.villagers.RVTPlayer;
 import io.github.tanguygab.realvillagertowns.villagers.RVTVillager;
 import io.github.tanguygab.realvillagertowns.villagers.VillagerManager;
@@ -38,12 +36,7 @@ public record PlayerInteractListener(RealVillagerTowns rvt, VillagerManager vm) 
             RVTVillager villager = vm.getVillager(clicked);
             if (villager.getInHand() == Material.POPPY && p.getUniqueId() == villager.getLikes()) {
                 p.getInventory().addItem(new ItemStack(Material.BLUE_ORCHID));
-                Trait trait = villager.getTrait();
-                Gender pGender = vm.getPlayer(p).getGender();
-                String nice = pGender == Gender.MALE ? "handsome" : "beautiful";
-
-                player.sendMessage(rvt.getText(trait.toString().toLowerCase() + "-gift", "Like", player, villager)
-                        .replace("<nice>", nice).replace("<sex2>", pGender.getChild()));
+                villager.getTrait().send(player);
                 rvt.giveItem(villager, null);
                 return;
             }

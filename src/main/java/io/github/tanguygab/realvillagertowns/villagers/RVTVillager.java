@@ -2,10 +2,10 @@ package io.github.tanguygab.realvillagertowns.villagers;
 
 import io.github.tanguygab.realvillagertowns.RealVillagerTowns;
 import io.github.tanguygab.realvillagertowns.Utils;
-import io.github.tanguygab.realvillagertowns.villagers.enums.Gender;
-import io.github.tanguygab.realvillagertowns.villagers.enums.Mood;
-import io.github.tanguygab.realvillagertowns.villagers.enums.RVTEntityType;
-import io.github.tanguygab.realvillagertowns.villagers.enums.Trait;
+import io.github.tanguygab.realvillagertowns.villagers.enums.entity.Gender;
+import io.github.tanguygab.realvillagertowns.villagers.enums.entity.Mood;
+import io.github.tanguygab.realvillagertowns.villagers.enums.entity.RVTEntityType;
+import io.github.tanguygab.realvillagertowns.villagers.enums.entity.Trait;
 import lombok.*;
 import org.bukkit.Location;
 import org.bukkit.Material;
