@@ -4,6 +4,7 @@ import io.github.tanguygab.realvillagertowns.Utils;
 import io.github.tanguygab.realvillagertowns.villagers.enums.entity.Mood;
 import io.github.tanguygab.realvillagertowns.villagers.RVTVillager;
 import io.github.tanguygab.realvillagertowns.villagers.VillagerManager;
+import io.github.tanguygab.realvillagertowns.villagers.enums.speeches.Speech;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
@@ -44,7 +45,7 @@ public record PlayerListener(VillagerManager vm) implements Listener {
             villager.swingMood(swing);
         } else villager.setMood(Mood.ANGRY,1);
 
-        vm.getPlayer(p).speech("punch", villager);
+        Speech.PUNCH.send(vm.getPlayer(p),villager);
     }
 
 }
