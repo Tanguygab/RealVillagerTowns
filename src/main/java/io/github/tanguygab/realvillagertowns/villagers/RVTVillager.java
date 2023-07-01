@@ -44,7 +44,7 @@ public class RVTVillager {
     @Setter private UUID likes;
     @Setter private Material inHand;
     @Setter private int drunk = 0;
-    private Mood mood;
+    private Mood mood = Mood.NEUTRAL;
     private int moodLevel = 0;
     @Setter private RVTPlayer followed;
 
