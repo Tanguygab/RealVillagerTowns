@@ -5,8 +5,6 @@ import io.github.tanguygab.realvillagertowns.Utils;
 import io.github.tanguygab.realvillagertowns.villagers.enums.entity.Gender;
 import io.github.tanguygab.realvillagertowns.villagers.enums.Interaction;
 import io.github.tanguygab.realvillagertowns.villagers.enums.entity.RVTEntityType;
-import io.github.tanguygab.realvillagertowns.villagers.enums.speeches.Speech;
-import io.github.tanguygab.realvillagertowns.villagers.enums.speeches.SpeechType;
 import lombok.*;
 import org.bukkit.entity.Player;
 
