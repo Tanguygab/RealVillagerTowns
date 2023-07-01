@@ -32,7 +32,7 @@ public enum Interaction {
         this(null);
     }
     Interaction(BiFunction<RVTPlayer,RVTVillager,Boolean> condition) {
-        lang = RealVillagerTowns.getInstance().getLang().getString("interactions."+this);
+        lang = RealVillagerTowns.getInstance().getLang().getString("interactions."+this.toString().toLowerCase().replace("_","-"));
         this.condition = condition;
     }
 
