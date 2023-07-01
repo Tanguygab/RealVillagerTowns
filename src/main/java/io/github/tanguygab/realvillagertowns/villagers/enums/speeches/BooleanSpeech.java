@@ -36,8 +36,8 @@ public enum BooleanSpeech {
         String suffixBad = yesNo ? "no" : "bad";
         for (SpeechType type : types) {
             String t = type.toString().toLowerCase();
-            good.put(type, RealVillagerTowns.getInstance().getSpeeches().getStringList(speech+"-"+suffixGood+"."+t));
-            bad.put(type, RealVillagerTowns.getInstance().getSpeeches().getStringList(speech+"-"+suffixBad+"."+t));
+            good.put(type, RealVillagerTowns.getInstance().getSpeeches().getStringList(t+"."+speech+"-"+suffixGood));
+            bad.put(type, RealVillagerTowns.getInstance().getSpeeches().getStringList(t+"."+speech+"-"+suffixBad));
         }
     }
 

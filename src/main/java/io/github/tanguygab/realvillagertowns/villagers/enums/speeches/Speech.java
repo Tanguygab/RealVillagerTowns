@@ -30,9 +30,9 @@ public enum Speech {
 
     Speech(SpeechType... types) {
         if (types.length == 0) types = new SpeechType[]{SpeechType.NORMAL, SpeechType.SPOUSE, SpeechType.CHILD};
-        String speech = this.toString().toLowerCase();
+        String speech = this.toString().toLowerCase().replace("_","-");
         for (SpeechType type : types)
-            messages.put(type,RealVillagerTowns.getInstance().getSpeeches().getStringList(speech+"."+type.toString().toLowerCase().replace("_","-")));
+            messages.put(type,RealVillagerTowns.getInstance().getSpeeches().getStringList(type.toString().toLowerCase()+"."+speech));
     }
 
     public static Speech fromGift(GiftType giftType) {
@@ -53,7 +53,6 @@ public enum Speech {
                 .replace("<parent2>", villager.getGender().getParent())
                 .replace("<gender>", villager.getGender().getChild())
         );
-
     }
 
 }
