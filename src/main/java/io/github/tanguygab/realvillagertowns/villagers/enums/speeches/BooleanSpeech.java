@@ -31,7 +31,7 @@ public enum BooleanSpeech {
     }
     BooleanSpeech(boolean yesNo, SpeechType... types) {
         if (types.length == 0) types = new SpeechType[]{SpeechType.NORMAL, SpeechType.SPOUSE, SpeechType.CHILD};
-        String speech = this.toString().toLowerCase();
+        String speech = this.toString().toLowerCase().replace("_","-");
         String suffixGood = yesNo ? "yes" : "good";
         String suffixBad = yesNo ? "no" : "bad";
         for (SpeechType type : types) {

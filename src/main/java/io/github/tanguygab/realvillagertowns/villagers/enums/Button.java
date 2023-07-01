@@ -16,7 +16,7 @@ public enum Button {
     @Getter private final String lang;
 
     Button() {
-        lang = RealVillagerTowns.getInstance().getLang().getString("buttons."+this);
+        lang = RealVillagerTowns.getInstance().getLang().getString("buttons."+this.toString().toLowerCase().replace("_","-"));
     }
 
     public static Button fromLang(String lang) {

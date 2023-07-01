@@ -32,7 +32,7 @@ public enum Speech {
         if (types.length == 0) types = new SpeechType[]{SpeechType.NORMAL, SpeechType.SPOUSE, SpeechType.CHILD};
         String speech = this.toString().toLowerCase();
         for (SpeechType type : types)
-            messages.put(type,RealVillagerTowns.getInstance().getSpeeches().getStringList(speech+"."+type.toString().toLowerCase()));
+            messages.put(type,RealVillagerTowns.getInstance().getSpeeches().getStringList(speech+"."+type.toString().toLowerCase().replace("_","-")));
     }
 
     public static Speech fromGift(GiftType giftType) {

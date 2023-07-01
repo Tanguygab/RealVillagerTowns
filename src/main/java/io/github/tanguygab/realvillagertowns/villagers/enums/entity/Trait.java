@@ -21,8 +21,9 @@ public enum Trait {
     private final List<String> speech;
 
     Trait() {
-        lang = RealVillagerTowns.getInstance().getLang().getString("traits."+this);
-        speech = RealVillagerTowns.getInstance().getSpeeches().getStringList("like."+this.toString().toLowerCase());
+        String trait = this.toString().toLowerCase();
+        lang = RealVillagerTowns.getInstance().getLang().getString("traits."+trait);
+        speech = RealVillagerTowns.getInstance().getSpeeches().getStringList("like-gift."+trait);
     }
 
     public void send(RVTPlayer player) {
