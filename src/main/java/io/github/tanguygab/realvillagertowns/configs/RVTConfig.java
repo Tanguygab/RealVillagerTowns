@@ -54,7 +54,7 @@ public class RVTConfig {
             try {
                 VILLAGERS_TYPES.add(EntityType.valueOf(str));
             } catch (Exception e) {
-                rvt.getLogger().severe("Invalid Villager entity type \""+str+"\"! Skipping...");
+                rvt.getLogger().warning("Invalid Villager entity type \""+str+"\"! Skipping...");
             }
         });
 
@@ -75,7 +75,7 @@ public class RVTConfig {
             items.getValues(false).forEach((mat,amount)->{
                 Material material = Material.getMaterial(mat);
                 if (material == null) {
-                    rvt.getLogger().severe("Invalid aidItem material type \""+mat+"\"! Skipping...");
+                    rvt.getLogger().warning("Invalid aidItem material type \""+mat+"\"! Skipping...");
                     return;
                 }
                 AID_ITEMS.add(new ItemStack(material, (int) amount));
@@ -87,7 +87,7 @@ public class RVTConfig {
             try {
                 HOSTILE_MOBS.add(EntityType.valueOf(str));
             } catch (Exception e) {
-                rvt.getLogger().severe("Invalid Hostile Mob entity type \""+str+"\"! Skipping...");
+                rvt.getLogger().warning("Invalid Hostile Mob entity type \""+str+"\"! Skipping...");
             }
         });
 
