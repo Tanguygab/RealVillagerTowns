@@ -58,10 +58,13 @@ public class VillagerMenu extends RVTMenu {
         if (button == null) return true;
 
         switch (button) {
-            case INTERACT -> rvt.getServer().getScheduler().runTask(rvt,()->new InteractionMenu(player,villager).onOpen());
+            case INTERACT -> {
+                new InteractionMenu(player,villager).onOpen();
+                return true;
+            }
             case TRADE -> {
                 player.setTrading(true);
-                player.sendMessage("Click player again to trade.");
+                player.sendMessage("Click again to trade.");
             }
             case REQUEST_AID -> rvt.getAid(player,villager);
             case SET_HOME -> {

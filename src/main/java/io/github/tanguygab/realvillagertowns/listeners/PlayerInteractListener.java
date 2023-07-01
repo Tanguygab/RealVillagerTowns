@@ -15,6 +15,7 @@ import org.bukkit.entity.Wolf;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.List;
@@ -23,16 +24,20 @@ public record PlayerInteractListener(RealVillagerTowns rvt, VillagerManager vm) 
 
     @EventHandler
     public void onPlayerInteract(PlayerInteractEntityEvent e) {
+        if (e.getHand() == EquipmentSlot.OFF_HAND) return;
         Player p = e.getPlayer();
         RVTPlayer player = vm.getPlayer(p);
         if (!(e.getRightClicked() instanceof LivingEntity clicked)) return;
-        if (!player.isTrading()
-                && vm.isVillagerEntity(e.getRightClicked())
+        if (vm.isVillagerEntity(e.getRightClicked())
                 && rvt.getConfiguration().USE_VILLAGER_INTERACTIONS
-                && !player.isInteracting()
                 && !clicked.hasMetadata("NPC")
                 && !clicked.hasMetadata("shopkeeper")) {
+            if (player.isTrading()) {
+                player.setTrading(false);
+                return;
+            }
             e.setCancelled(true);
+            if (player.isInteracting()) return;
             RVTVillager villager = vm.getVillager(clicked);
             if (villager.getInHand() == Material.POPPY && p.getUniqueId() == villager.getLikes()) {
                 p.getInventory().addItem(new ItemStack(Material.BLUE_ORCHID));
@@ -43,6 +48,7 @@ public record PlayerInteractListener(RealVillagerTowns rvt, VillagerManager vm) 
             if (player.getGifting() == villager) {
                 rvt.giveGift(player, villager);
                 player.setInteracting(true);
+                player.setGifting(null);
                 rvt.getServer().getScheduler().scheduleSyncDelayedTask(rvt, () -> player.setInteracting(false),  3L);
                 return;
             }
@@ -60,11 +66,7 @@ public record PlayerInteractListener(RealVillagerTowns rvt, VillagerManager vm) 
             clickedPlayer(player,pClicked);
             return;
         }
-        if (clicked instanceof Wolf wolf) {
-            clickedWolf(wolf, e.getRightClicked().getPassengers());
-            return;
-        }
-        if (player.isTrading()) rvt.getServer().getScheduler().scheduleSyncDelayedTask(rvt, () -> player.setTrading(false),  20L);
+        if (clicked instanceof Wolf wolf) clickedWolf(wolf, e.getRightClicked().getPassengers());
     }
 
     private void clickedPlayer(RVTPlayer player, Player clicked) {
