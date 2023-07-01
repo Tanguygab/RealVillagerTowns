@@ -16,7 +16,7 @@ import java.util.List;
 
 public class RVTConfig {
 
-    public final boolean USE_NAMES;
+    public final boolean USE_NAMES_AS_SKINS;
     public final boolean USE_VILLAGER_INTERACTIONS;
     public final boolean AUTO_CHANGE_VILLAGERS;
 
@@ -45,7 +45,7 @@ public class RVTConfig {
         rvt.reloadConfig();
         FileConfiguration cfg = rvt.getConfig();
 
-        USE_NAMES = cfg.getBoolean("use-names",true);
+        USE_NAMES_AS_SKINS = cfg.getBoolean("use-names-as-skins",false);
         USE_VILLAGER_INTERACTIONS = cfg.getBoolean("use-villager-interactions",true);
         AUTO_CHANGE_VILLAGERS = cfg.getBoolean("auto-change-villagers",true);
 

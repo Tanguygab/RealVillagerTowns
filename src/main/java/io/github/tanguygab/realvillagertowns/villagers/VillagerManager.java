@@ -70,8 +70,8 @@ public class VillagerManager {
     public void makeVillager(LivingEntity entity) {
         if (!data.contains("villagers."+entity.getUniqueId()) && !rvt.getConfiguration().AUTO_CHANGE_VILLAGERS) return;
         RVTVillager villager = data.contains("villagers."+entity.getUniqueId()) ? loadVillager(entity) : createVillager(entity);
-        disguise(villager);
         villagers.put(villager.getUniqueId(),villager);
+        disguise(villager);
     }
 
     private RVTVillager createVillager(LivingEntity entity) {
@@ -88,10 +88,10 @@ public class VillagerManager {
             }
             type = villager.getProfession().getKey().getKey();
         } else type = entity.getType().getKey().getKey().replace("_", " ");
-        String skin = Utils.randomFromList(skins.getOrDefault(type,Map.of()).getOrDefault(gender,List.of("Steve")));
+        String name = Utils.randomFromList(names.get(gender));
+        String skin = rvt.getConfiguration().USE_NAMES_AS_SKINS ? name : Utils.randomFromList(skins.getOrDefault(type,Map.of()).getOrDefault(gender,List.of("Steve")));
         String title = " the " + type;
 
-        String name = rvt.getConfiguration().USE_NAMES ? Utils.randomFromList(names.get(gender)) : skin;
         Trait trait = Trait.values()[Utils.random(Trait.values().length)];
 
         return new RVTVillager(entity,uuid,name,gender,skin,title,trait);
@@ -139,6 +139,10 @@ public class VillagerManager {
     private void saveVillager(RVTVillager villager) {
         UUID id = villager.getUniqueId();
         ConfigurationSection cfg = data.getConfigurationSection("villagers."+id);
+        if (cfg == null) {
+            data.set("villagers."+id+".name",villager.getName());
+            cfg = data.getConfigurationSection("villagers."+id);
+        }
         assert cfg != null;
         cfg.set("name", villager.getName());
         cfg.set("gender", villager.getGender().toString());
@@ -164,7 +168,7 @@ public class VillagerManager {
         cfg.set("likes",villager.getLikes() == null ? null : villager.getLikes().toString());
         cfg.set("item",villager.getInHand() == null ? null : villager.getInHand().toString());
         cfg.set("drunk",villager.getDrunk());
-        cfg.set("mood",villager.getMood());
+        cfg.set("mood",villager.getMood().toString());
         cfg.set("mood-level",villager.getMoodLevel());
     }
 
@@ -196,6 +200,10 @@ public class VillagerManager {
     public void savePlayer(RVTPlayer player) {
         UUID id = player.getUniqueId();
         ConfigurationSection cfg = data.getConfigurationSection("players."+id);
+        if (cfg == null) {
+            data.set("players."+id+".name",player.getName());
+            cfg = data.getConfigurationSection("players."+id);
+        }
         assert cfg != null;
         cfg.set("name", player.getName());
         cfg.set("gender", player.getGender().toString());
@@ -204,7 +212,7 @@ public class VillagerManager {
         cfg.set("partner.uuid",player.getPartner() == null ? null : player.getPartner());
         cfg.set("children",player.getChildren().isEmpty() ? null : player.getChildren().stream().map(UUID::toString).toList());
         cfg.set("has-baby",player.isHasBaby());
-        cfg.set("baby",player.getBaby().toString());
+        cfg.set("baby",player.isHasBaby() ? player.getBaby().toString() : null);
 
         cfg.set("likes",player.getLikes() == null ? null : player.getLikes().stream().map(UUID::toString).toList());
         Map<String,Integer> happiness = new HashMap<>();
@@ -215,8 +223,9 @@ public class VillagerManager {
     public RVTVillager getVillager(Entity entity) {
         return villagers.get(entity.getUniqueId());
     }
-    public RVTVillager getVillager(UUID uuid) {
-        return villagers.get(uuid);
+    public String getVillagerName(RVTEntityType type, UUID uuid) {
+        if (type == null || uuid == null) return "No one";
+        return type == RVTEntityType.PLAYER ? players.get(uuid).getName() : villagers.get(uuid).getName();
     }
     public RVTPlayer getPlayer(Player p) {
         return p == null ? null : players.get(p.getUniqueId());

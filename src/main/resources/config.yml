@@ -1,4 +1,4 @@
-use-names: true
+use-names-as-skins: false
 use-villager-interactions: true
 auto-change-villagers: true
 

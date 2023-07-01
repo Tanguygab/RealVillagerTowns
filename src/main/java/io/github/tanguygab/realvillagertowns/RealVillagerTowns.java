@@ -84,6 +84,8 @@ public final class RealVillagerTowns extends JavaPlugin {
     public void onDisable() {
         HandlerList.unregisterAll(this);
         villagerManager.unload();
+        try {data.save(dataFile);}
+        catch (IOException e1) {e1.printStackTrace();}
     }
 
     public void loadFiles() {
@@ -139,7 +141,7 @@ public final class RealVillagerTowns extends JavaPlugin {
             if (p != null) {
                 p.sendMessage("Your child " + villager.getName() + " has grown up!");
                 p.clearBaby();
-            } else {
+            } else if (uuid != null) {
                 set("players." + uuid + ".hasBaby", false);
                 set("players." + uuid + ".baby", null);
             }
@@ -198,7 +200,7 @@ public final class RealVillagerTowns extends JavaPlugin {
             return;
         }
         player.divorce();
-        RVTVillager partner = villagerManager.getVillager(partnerUUID);
+        RVTVillager partner = villagerManager.getVillagers().get(partnerUUID);
         partner.divorce();
         partner.setMood(Mood.SAD,3);
         player.setHappiness(partner,-250);
