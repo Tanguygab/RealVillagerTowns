@@ -73,7 +73,7 @@ hostile-mobs:
   - ZOMBIE
   - SLIME
   - GHAST
-  - PIG_ZOMBIE
+  - ZOMBIFIED_PIGLIN
   - ENDERMAN
   - CAVE_SPIDER
   - SILVERFISH
