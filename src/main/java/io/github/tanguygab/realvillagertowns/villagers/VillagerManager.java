@@ -70,6 +70,7 @@ public class VillagerManager {
     public void makeVillager(LivingEntity entity) {
         if (!data.contains("villagers."+entity.getUniqueId()) && !rvt.getConfiguration().AUTO_CHANGE_VILLAGERS) return;
         RVTVillager villager = data.contains("villagers."+entity.getUniqueId()) ? loadVillager(entity) : createVillager(entity);
+        if (villager == null) return;
         villagers.put(villager.getUniqueId(),villager);
         disguise(villager);
     }
@@ -100,37 +101,43 @@ public class VillagerManager {
     private RVTVillager loadVillager(LivingEntity entity) {
         UUID id = entity.getUniqueId();
         ConfigurationSection cfg = data.getConfigurationSection("villagers."+id);
+        if (cfg == null) return null;
 
-        RVTVillager villager = new RVTVillager(entity,id,
-                cfg.getString("name"),
-                Gender.valueOf(cfg.getString("gender")),
-                cfg.getString("skin"),
-                cfg.getString("title"),
-                Trait.valueOf(cfg.getString("trait")));
+        String name = cfg.getString("name");
+        Gender gender = Gender.valueOf(cfg.getString("gender"));
+        String skin = cfg.getString("skin");
+        String title = cfg.getString("title");
+        Trait trait = Trait.valueOf(cfg.getString("trait"));
+        if (name == null || skin == null || title == null) return null;
+
+        RVTVillager villager = new RVTVillager(entity,id,name,gender,skin,title,trait);
 
         if (cfg.contains("parent")) {
             RVTEntityType parentType = RVTEntityType.valueOf(cfg.getString("parent.type"));
-            UUID parent1 = UUID.fromString(cfg.getString("parent.parent1"));
-            UUID parent2 = cfg.contains("parent2") ? UUID.fromString(cfg.getString("parent.parent2")) : null;
+            UUID parent1 = UUID.fromString(Objects.requireNonNull(cfg.getString("parent.parent1")));
+            UUID parent2 = cfg.contains("parent2") ? UUID.fromString(Objects.requireNonNull(cfg.getString("parent.parent2"))) : null;
             villager.setParent(parentType,parent1,parent2);
         }
         if (cfg.contains("partner")) {
             RVTEntityType type = RVTEntityType.valueOf(cfg.getString("partner.type"));
-            UUID partner = UUID.fromString(cfg.getString("partner.uuid"));
+            UUID partner = UUID.fromString(Objects.requireNonNull(cfg.getString("partner.uuid")));
             villager.marry(partner,type);
         }
         if (cfg.contains("children")) cfg.getStringList("children").forEach(uuid->villager.getChildren().add(UUID.fromString(uuid)));
 
-        if (cfg.contains("home")) {
-            ConfigurationSection home = cfg.getConfigurationSection("home");
-            World world = rvt.getServer().getWorld(home.getString("world"));
-            if (world != null) {
-                Location loc = new Location(world,home.getDouble("x"),home.getDouble("y"),home.getDouble("home.z"));
-                villager.setHome(loc);
+        ConfigurationSection home = cfg.getConfigurationSection("home");
+        if (home != null) {
+            String worldName = home.getString("world");
+            if (worldName != null) {
+                World world = rvt.getServer().getWorld(worldName);
+                if (world != null) {
+                    Location loc = new Location(world, home.getDouble("x"), home.getDouble("y"), home.getDouble("home.z"));
+                    villager.setHome(loc);
+                }
             }
         }
-        if (cfg.contains("likes")) villager.setLikes(UUID.fromString(cfg.getString("likes")));
-        if (cfg.contains("item")) villager.setInHand(Material.getMaterial(cfg.getString("item")));
+        if (cfg.contains("likes")) villager.setLikes(UUID.fromString(Objects.requireNonNull(cfg.getString("likes"))));
+        if (cfg.contains("item")) villager.setInHand(Material.getMaterial(Objects.requireNonNull(cfg.getString("item"))));
         villager.setDrunk(cfg.getInt("drunk",0));
         villager.setMood(Mood.valueOf(cfg.getString("mood")),cfg.getInt("mood-level",1));
         return villager;
@@ -184,15 +191,16 @@ public class VillagerManager {
 
         if (cfg.contains("partner")) {
             RVTEntityType type = RVTEntityType.valueOf(cfg.getString("partner.type"));
-            UUID partner = UUID.fromString(cfg.getString("partner.uuid"));
+            UUID partner = UUID.fromString(Objects.requireNonNull(cfg.getString("partner.uuid")));
             player.marry(partner,type);
         }
         if (cfg.contains("children")) cfg.getStringList("children").forEach(uuid->player.getChildren().add(UUID.fromString(uuid)));
-        if (cfg.getBoolean("has-baby")) player.setBaby(UUID.fromString(cfg.getString("baby")));
+        if (cfg.getBoolean("has-baby",false)) player.setBaby(UUID.fromString(Objects.requireNonNull(cfg.getString("baby"))));
         if (cfg.contains("likes")) cfg.getStringList("likes").forEach(uuid->player.getLikes().add(UUID.fromString(uuid)));
 
-        if (cfg.contains("happiness")) {
-            Map<String,Object> map = cfg.getConfigurationSection("happiness").getValues(false);
+        ConfigurationSection happiness = cfg.getConfigurationSection("happiness");
+        if (happiness != null) {
+            Map<String,Object> map = happiness.getValues(false);
             if (!map.isEmpty()) map.forEach((uuid,lvl)->player.getHappiness().put(UUID.fromString(uuid), (int) lvl));
         }
         players.put(id,player);
