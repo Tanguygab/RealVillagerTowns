@@ -41,10 +41,7 @@ public class RVTConfig {
     private final List<EntityType> HOSTILE_MOBS = new ArrayList<>();
 
     public RVTConfig(RealVillagerTowns rvt) {
-        rvt.saveDefaultConfig();
-        rvt.reloadConfig();
         FileConfiguration cfg = rvt.getConfig();
-
         USE_NAMES_AS_SKINS = cfg.getBoolean("use-names-as-skins",false);
         USE_VILLAGER_INTERACTIONS = cfg.getBoolean("use-villager-interactions",true);
         AUTO_CHANGE_VILLAGERS = cfg.getBoolean("auto-change-villagers",true);

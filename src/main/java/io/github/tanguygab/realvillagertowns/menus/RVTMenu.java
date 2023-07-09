@@ -2,10 +2,10 @@ package io.github.tanguygab.realvillagertowns.menus;
 
 import io.github.tanguygab.realvillagertowns.RealVillagerTowns;
 import io.github.tanguygab.realvillagertowns.Utils;
+import io.github.tanguygab.realvillagertowns.configs.RVTMessages;
 import io.github.tanguygab.realvillagertowns.villagers.RVTPlayer;
 import io.github.tanguygab.realvillagertowns.villagers.VillagerManager;
 import org.bukkit.Material;
-import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -24,6 +24,7 @@ public abstract class RVTMenu {
 
     protected final RealVillagerTowns rvt = RealVillagerTowns.getInstance();
     protected final VillagerManager vm = rvt.getVillagerManager();
+    protected final RVTMessages msgs = rvt.getMessages();
     public Inventory inv;
 
     public RVTMenu(RVTPlayer player, String title, int rows) {
@@ -38,7 +39,7 @@ public abstract class RVTMenu {
     }
 
     public abstract void onOpen();
-    public abstract boolean onClick(ItemStack item, int slot, ClickType click);
+    public abstract void onClick(ItemStack item, int slot);
     public void onClose() {
         openedMenus.remove(player);
         player.getPlayer().closeInventory();

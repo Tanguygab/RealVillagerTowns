@@ -177,6 +177,7 @@ public class VillagerManager {
         cfg.set("drunk",villager.getDrunk());
         cfg.set("mood",villager.getMood().toString());
         cfg.set("mood-level",villager.getMoodLevel());
+        rvt.save();
     }
 
     public void loadPlayer(Player p) {
@@ -226,6 +227,7 @@ public class VillagerManager {
         Map<String,Integer> happiness = new HashMap<>();
         player.getHappiness().forEach((uuid,lvl)->happiness.put(uuid.toString(),lvl));
         cfg.set("happiness",happiness.isEmpty() ? null : happiness);
+        rvt.save();
     }
 
     public RVTVillager getVillager(Entity entity) {
@@ -263,8 +265,8 @@ public class VillagerManager {
 
                 partner.getPlayer().sendMessage("§cYour "+(villager.getGender() == Gender.FEMALE ? "wife" : "husband")+" " + villager.getName() + " has died!");
             } else {
-                rvt.set("players." + partnerUUID + ".married", null);
-                rvt.set("players." + partnerUUID + ".partner", null);
+                data.set("players." + partnerUUID + ".married", null);
+                data.set("players." + partnerUUID + ".partner", null);
             }
         }
         if (villager.getParentType() == RVTEntityType.PLAYER) {
@@ -278,14 +280,15 @@ public class VillagerManager {
 
                 parent.getPlayer().sendMessage("§cYour "+(villager.getGender() == Gender.FEMALE ? "daughter" : "son")+" " + villager.getName() + " has died!");
             } else {
-                rvt.set("players." + parentUUID + ".hasBaby", false);
-                rvt.set("players." + parentUUID + ".baby", null);
+                data.set("players." + parentUUID + ".hasBaby", false);
+                data.set("players." + parentUUID + ".baby", null);
                 List<String> children = data.getStringList("players." + parentUUID + ".children");
                 children.remove(id.toString());
-                rvt.set("players." + parentUUID + ".children",children);
+                data.set("players." + parentUUID + ".children",children);
             }
         }
-        rvt.set("villagers." + id, null);
+        data.set("villagers." + id, null);
+        rvt.save();
     }
 
     public void procreate(RVTPlayer player, RVTVillager villager) {

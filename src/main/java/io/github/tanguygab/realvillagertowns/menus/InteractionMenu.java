@@ -4,7 +4,6 @@ import io.github.tanguygab.realvillagertowns.villagers.RVTPlayer;
 import io.github.tanguygab.realvillagertowns.villagers.RVTVillager;
 import io.github.tanguygab.realvillagertowns.villagers.enums.Interaction;
 import org.bukkit.Material;
-import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 
@@ -26,21 +25,21 @@ public class InteractionMenu extends RVTMenu {
     }
 
     @Override
-    public boolean onClick(ItemStack item, int slot, ClickType click) {
+    public void onClick(ItemStack item, int slot) {
         ItemMeta meta = item.getItemMeta();
-        if (meta == null || !meta.hasDisplayName()) return true;
+        if (meta == null || !meta.hasDisplayName()) return;
         String currentItem = meta.getDisplayName();
 
         if (Interaction.PROCREATE.getLang().equals(currentItem)) {
             vm.procreate(player, villager);
             onClose();
-            return true;
+            return;
         }
         if (Interaction.GIFT.getLang().equals(currentItem)) {
             player.sendMessage("Right-click on a villager to give them the item in your hand.");
             player.setGifting(villager);
             onClose();
-            return true;
+            return;
         }
         for (Interaction interaction : Interaction.values()) {
             if (interaction.getLang().equals(currentItem)) {
@@ -49,6 +48,5 @@ public class InteractionMenu extends RVTMenu {
                 break;
             }
         }
-        return true;
     }
 }

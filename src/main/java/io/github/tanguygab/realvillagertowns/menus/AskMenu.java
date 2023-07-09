@@ -2,7 +2,6 @@ package io.github.tanguygab.realvillagertowns.menus;
 
 import io.github.tanguygab.realvillagertowns.villagers.RVTPlayer;
 import org.bukkit.Material;
-import org.bukkit.event.inventory.ClickType;
 import org.bukkit.event.inventory.InventoryType;
 import org.bukkit.inventory.ItemStack;
 
@@ -28,7 +27,7 @@ public abstract class AskMenu extends RVTMenu {
     protected abstract void onDecline();
 
     @Override
-    public boolean onClick(ItemStack item, int slot, ClickType click) {
+    public void onClick(ItemStack item, int slot) {
         switch (slot) {
             case 1 -> {
                 onClose();
@@ -39,7 +38,6 @@ public abstract class AskMenu extends RVTMenu {
                 onDecline();
             }
         }
-        return true;
     }
 
     @Override

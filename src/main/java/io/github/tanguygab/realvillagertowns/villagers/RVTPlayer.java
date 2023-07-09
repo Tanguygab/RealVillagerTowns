@@ -19,7 +19,7 @@ public class RVTPlayer {
     private final UUID uniqueId;
     private final String name;
 
-    @NonNull private Gender gender;
+    @NonNull @Setter private Gender gender;
 
     private RVTEntityType partnerType;
     private UUID partner;
@@ -32,7 +32,6 @@ public class RVTPlayer {
     @Setter private LocalDateTime aidCooldown;
 
     @Setter private RVTVillager gifting;
-    @Setter private boolean trading = false;
     @Setter private boolean interacting = false;
 
     private Interaction lastInteraction;

@@ -3,6 +3,7 @@ package io.github.tanguygab.realvillagertowns;
 import io.github.tanguygab.realvillagertowns.villagers.RVTPlayer;
 import io.github.tanguygab.realvillagertowns.villagers.RVTVillager;
 import io.github.tanguygab.realvillagertowns.villagers.VillagerManager;
+import io.github.tanguygab.realvillagertowns.villagers.enums.entity.Gender;
 import lombok.NonNull;
 import org.bukkit.block.Block;
 import org.bukkit.command.Command;
@@ -69,12 +70,14 @@ public class RVTCommand implements CommandExecutor {
                 helpMsg(sender);
                 return;
             }
-            if (!args[1].equalsIgnoreCase("male") &&  !args[1].equalsIgnoreCase("female")) {
-                sendMessage(sender,"&cUnrecognized sex " + args[1]);
-                return;
+            String g = args[1];
+            try {
+                Gender gender = Gender.valueOf(g.toUpperCase());
+                sendMessage(sender,"&eYour sex has been set to " + g);
+                vm.getPlayer(p).setGender(gender);
+            } catch (Exception e) {
+                sendMessage(sender,"&cUnrecognized sex " + g);
             }
-            sendMessage(sender,"&eYour sex has been set to " + args[1]);
-            rvt.set("players." + p.getUniqueId() + ".sex", args[1]);
             return;
         }
         if (!hasPermission(sender)) {

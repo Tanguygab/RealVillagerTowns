@@ -44,8 +44,10 @@ public record RVTListener(RealVillagerTowns rvt, VillagerManager vm) implements 
     @EventHandler
     public void onInventoryClick(InventoryClickEvent e) {
         RVTPlayer player;
-        if (e.getWhoClicked() instanceof Player p && RVTMenu.openedMenus.containsKey(player = vm.getPlayer(p)) && e.getCurrentItem() != null)
-            e.setCancelled(RVTMenu.openedMenus.get(player).onClick(e.getCurrentItem(), e.getRawSlot(), e.getClick()));
+        if (e.getWhoClicked() instanceof Player p && RVTMenu.openedMenus.containsKey(player = vm.getPlayer(p)) && e.getCurrentItem() != null) {
+            e.setCancelled(true);
+            RVTMenu.openedMenus.get(player).onClick(e.getCurrentItem(), e.getRawSlot());
+        }
     }
 
     @EventHandler

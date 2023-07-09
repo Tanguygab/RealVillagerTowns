@@ -1,13 +1,19 @@
 package io.github.tanguygab.realvillagertowns.menus;
 
+import io.github.tanguygab.realvillagertowns.Utils;
 import io.github.tanguygab.realvillagertowns.villagers.RVTPlayer;
 import io.github.tanguygab.realvillagertowns.villagers.RVTVillager;
 import io.github.tanguygab.realvillagertowns.villagers.enums.Button;
+import io.github.tanguygab.realvillagertowns.villagers.enums.entity.Mood;
+import io.github.tanguygab.realvillagertowns.villagers.enums.speeches.BooleanSpeech;
+import io.github.tanguygab.realvillagertowns.villagers.enums.speeches.Speech;
 import org.bukkit.Material;
 import org.bukkit.entity.Villager;
-import org.bukkit.event.inventory.ClickType;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+
+import java.time.LocalDateTime;
+import java.util.UUID;
 
 public class VillagerMenu extends RVTMenu {
 
@@ -36,7 +42,7 @@ public class VillagerMenu extends RVTMenu {
             open();
             return;
         }
-        if (v.getProfession() != Villager.Profession.NITWIT) addItem(Button.TRADE);
+        if (v.getProfession() != Villager.Profession.NITWIT && v.getProfession() != Villager.Profession.NONE) addItem(Button.TRADE);
         addItem(Button.SET_HOME);
         if (!player.isMarried(villager) && !player.isChild(villager)) addItem(Button.REQUEST_AID);
         if (!player.isBaby(villager) && v.getProfession() == Villager.Profession.CLERIC) {
@@ -51,32 +57,62 @@ public class VillagerMenu extends RVTMenu {
     }
 
     @Override
-    public boolean onClick(ItemStack item, int slot, ClickType click) {
+    public void onClick(ItemStack item, int slot) {
         ItemMeta meta = item.getItemMeta();
-        if (meta == null || !meta.hasDisplayName()) return true;
+        if (meta == null || !meta.hasDisplayName()) return;
         Button button = Button.fromLang(meta.getDisplayName());
-        if (button == null) return true;
+        if (button == null) return;
 
         switch (button) {
             case INTERACT -> {
                 new InteractionMenu(player,villager).onOpen();
-                return true;
+                return;
             }
             case TRADE -> {
-                player.setTrading(true);
-                player.sendMessage("Click again to trade.");
+                player.getPlayer().openMerchant((Villager) villager.getEntity(),true);
+                return;
             }
-            case REQUEST_AID -> rvt.getAid(player,villager);
+            case REQUEST_AID -> {
+                if (rvt.getConfiguration().isOnCooldown(player.getAidCooldown())) {
+                    BooleanSpeech.AID.sendBad(player,villager);
+                    player.setHappiness(villager, -1);
+                    villager.swingMood(Math.max(Utils.random(-8, 1), 0));
+                    return;
+                }
+                BooleanSpeech.AID.sendGood(player,villager);
+                player.getPlayer().getInventory().addItem(rvt.getConfiguration().getAidItem());
+                player.setAidCooldown(LocalDateTime.now());
+            }
             case SET_HOME -> {
                 villager.setHome();
                 player.sendMessage(villager.getName() + "'s home set!");
             }
-            case ADOPT -> rvt.adoptBaby(player);
-            case DIVORCE -> rvt.divorce(player);
-            default -> {return true;}
+            case ADOPT -> {
+                if (player.isHasBaby()) {
+                    player.sendMessage(msgs.ALREADY_HAVE_BABY);
+                    return;
+                }
+                player.sendMessage(msgs.ADOPT);
+                rvt.makeBaby(player,null);
+            }
+            case DIVORCE -> {
+                UUID partnerUUID = player.getPartner();
+                if (partnerUUID == null) {
+                    player.sendMessage("§cYou are not married!");
+                    return;
+                }
+                player.divorce();
+                RVTVillager partner = vm.getVillagers().get(partnerUUID);
+                partner.divorce();
+                partner.setMood(Mood.SAD,3);
+                player.setHappiness(partner,-250);
+
+                player.sendMessage(msgs.getDivorce(partner));
+                Speech.DIVORCE.send(player,partner);
+            }
+            default -> {return;}
         }
         onClose();
-        return true;
     }
 
     public ItemStack getInfo(RVTPlayer p, RVTVillager villager) {
